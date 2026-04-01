@@ -328,9 +328,13 @@ async def home(request: Request):
     try:
         increment_visitor()
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("index.html", {"request": request, "visitor_count": visitor_count})
+        logger.info(f"visitor_count type: {type(visitor_count)}, value: {visitor_count}")
+        context = {"request": request, "visitor_count": int(visitor_count) if visitor_count else 0}
+        return templates.TemplateResponse("index.html", context)
     except Exception as e:
+        import traceback
         logger.error(f"Home page error: {str(e)}")
+        logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/about")
