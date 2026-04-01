@@ -323,7 +323,7 @@ def delete_session(session_id: str):
     conn.commit()
     conn.close()
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def home(request: Request):
     try:
         increment_visitor()
@@ -337,7 +337,7 @@ async def home(request: Request):
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail="Internal server error")
 
-@app.get("/about")
+@app.api_route("/about", methods=["GET", "HEAD"])
 async def about(request: Request):
     visitor_count = get_visitor_count()
     return templates.TemplateResponse("about.html", {"request": request, "visitor_count": visitor_count})
