@@ -18,7 +18,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Database setup
 def init_db():
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
     # Create users table
@@ -140,7 +142,9 @@ class ContactCreate(BaseModel):
 
 
 def get_db_connection():
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -199,7 +203,9 @@ def create_session(user_id: int, user_type: str, email: str) -> str:
     session_id = secrets.token_urlsafe(32)
     expires_at = datetime.now().timestamp() + (24 * 60 * 60)  # 24 hours for users
     
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('INSERT INTO sessions (id, user_id, user_type, email, expires_at) VALUES (?, ?, ?, ?, ?)',
                  (session_id, user_id, user_type, email, datetime.fromtimestamp(expires_at)))
@@ -210,7 +216,9 @@ def create_session(user_id: int, user_type: str, email: str) -> str:
 
 def validate_session(session_id: str):
     """Validate session and return user info"""
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM sessions WHERE id = ? AND expires_at > ?', 
                  (session_id, datetime.now()))
@@ -235,7 +243,9 @@ async def api_get_session(request: Request):
     if not session:
         return {'user': None, 'admin': None}
 
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     if session['user_type'] == 'user':
@@ -259,7 +269,9 @@ async def api_get_session(request: Request):
 
 def delete_session(session_id: str):
     """Delete session"""
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('DELETE FROM sessions WHERE id = ?', (session_id,))
     conn.commit()
@@ -449,7 +461,9 @@ async def dashboard(request: Request):
         return RedirectResponse(url="/login", status_code=303)
     
     # Get user data
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT fullname, email, created_at FROM users WHERE id = ?', (session['user_id'],))
     user = cursor.fetchone()
@@ -473,7 +487,9 @@ async def admin(request: Request):
         return RedirectResponse(url="/admin-login", status_code=303)
 
     # Get admin data
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT fullname, username, role, department FROM admin_users WHERE id = ?', (session['user_id'],))
     admin = cursor.fetchone()
@@ -520,7 +536,9 @@ async def settings(request: Request):
         return RedirectResponse(url="/login", status_code=303)
     
     # Get user data based on session type
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
     if session['user_type'] == 'admin':
@@ -590,7 +608,9 @@ async def register_user(request: Request):
         })
     
     try:
-        conn = sqlite3.connect('users.db')
+        import os
+        db_path = os.path.join(os.getcwd(), 'users.db')
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
         # Check if email already exists
@@ -637,7 +657,9 @@ async def login_user(request: Request):
     email = form.get('email')
     password = form.get('password')
     
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
     # Check user credentials
@@ -670,7 +692,9 @@ async def admin_login_user(request: Request):
     username = form.get('username')
     password = form.get('password')
     
-    conn = sqlite3.connect('users.db')
+    import os
+    db_path = os.path.join(os.getcwd(), 'users.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
     # Check admin credentials
@@ -717,7 +741,9 @@ async def admin_register_user(request: Request):
         })
     
     try:
-        conn = sqlite3.connect('users.db')
+        import os
+        db_path = os.path.join(os.getcwd(), 'users.db')
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
         # Check if username already exists
