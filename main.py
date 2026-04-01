@@ -3,13 +3,44 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr, ValidationError
+from contextlib import asynccontextmanager
 import sqlite3
 import bcrypt
 from datetime import datetime
 import secrets
 import uvicorn
+import logging
+import os
+import sys
 
-app = FastAPI()
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    try:
+        logger.info("Application starting up...")
+        init_db()
+        logger.info("Application startup completed successfully")
+        yield
+    except Exception as e:
+        logger.error(f"Application startup failed: {str(e)}")
+        raise
+    finally:
+        # Shutdown
+        logger.info("Application shutting down...")
+
+app = FastAPI(lifespan=lifespan)
 
 templates = Jinja2Templates(directory="templates")
 
@@ -18,13 +49,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Database setup
 def init_db():
-    import os
-    db_path = os.path.join(os.getcwd(), 'users.db')
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    
-    # Create users table
-    cursor.execute('''
+    try:
+        db_path = os.path.join(os.getcwd(), 'users.db')
+        logger.info(f"Initializing database at: {db_path}")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Create users table
+        cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT UNIQUE NOT NULL,
@@ -37,90 +69,94 @@ def init_db():
             is_active BOOLEAN DEFAULT 1
         )
     ''')
-    
-    # Create admin users table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS admin_users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            fullname TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            role TEXT DEFAULT 'admin',
-            department TEXT,
-            security_question TEXT,
-            security_answer TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            last_login TIMESTAMP,
-            is_active BOOLEAN DEFAULT 1
-        )
-    ''')
-    
-    # Create sessions table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS sessions (
-            id TEXT PRIMARY KEY,
-            user_id INTEGER,
-            user_type TEXT, -- 'user' or 'admin'
-            email TEXT,
-            expires_at TIMESTAMP,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
+        
+        # Create admin users table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS admin_users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                fullname TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                role TEXT DEFAULT 'admin',
+                department TEXT,
+                security_question TEXT,
+                security_answer TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_login TIMESTAMP,
+                is_active BOOLEAN DEFAULT 1
+            )
+        ''')
+        
+        # Create sessions table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS sessions (
+                id TEXT PRIMARY KEY,
+                user_id INTEGER,
+                user_type TEXT, -- 'user' or 'admin'
+                email TEXT,
+                expires_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
 
-    # Create contacts table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS contacts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            subject TEXT NOT NULL,
-            message TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_resolved BOOLEAN DEFAULT 0
-        )
-    ''')
+        # Create contacts table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS contacts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                subject TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_resolved BOOLEAN DEFAULT 0
+            )
+        ''')
 
-    # Create projects table (for dynamic filtering / backend CRUD)
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS projects (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            description TEXT,
-            tags TEXT,
-            image TEXT,
-            demo_url TEXT,
-            github_url TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
+        # Create projects table (for dynamic filtering / backend CRUD)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS projects (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT,
+                tags TEXT,
+                image TEXT,
+                demo_url TEXT,
+                github_url TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
 
-    # Create metrics table for visitor count
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS metrics (
-            key TEXT PRIMARY KEY,
-            value INTEGER DEFAULT 0
-        )
-    ''')
+        # Create metrics table for visitor count
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS metrics (
+                key TEXT PRIMARY KEY,
+                value INTEGER DEFAULT 0
+            )
+        ''')
 
-    # Insert default visitor count record if missing
-    cursor.execute('INSERT OR IGNORE INTO metrics (key, value) VALUES (?, ?)', ('visitor_count', 0))
+        # Insert default visitor count record if missing
+        cursor.execute('INSERT OR IGNORE INTO metrics (key, value) VALUES (?, ?)', ('visitor_count', 0))
 
-    # Seed initial projects if table is empty
-    cursor.execute('SELECT COUNT(*) FROM projects')
-    project_count = cursor.fetchone()[0]
-    if project_count == 0:
-        cursor.executemany('''
-            INSERT INTO projects (title, description, tags, image, demo_url, github_url)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', [
-            ('E-Commerce Platform', 'Full-stack e-commerce solution with payment integration and admin dashboard.', 'React,Node.js,MongoDB', '/static/images/2.webp', '#', '#'),
-            ('Task Management App', 'Collaborative task management tool with real-time updates and team features.', 'Vue.js,FastAPI,Redis', '/static/images/3.jpg', '#', '#'),
-            ('Weather Dashboard', 'Real-time weather monitoring dashboard with data visualization and forecasts.', 'JavaScript,Chart.js,API', '/static/images/4.webp', '#', '#')
-        ])
+        # Seed initial projects if table is empty
+        cursor.execute('SELECT COUNT(*) FROM projects')
+        project_count = cursor.fetchone()[0]
+        if project_count == 0:
+            cursor.executemany('''
+                INSERT INTO projects (title, description, tags, image, demo_url, github_url)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', [
+                ('E-Commerce Platform', 'Full-stack e-commerce solution with payment integration and admin dashboard.', 'React,Node.js,MongoDB', '/static/images/2.webp', '#', '#'),
+                ('Task Management App', 'Collaborative task management tool with real-time updates and team features.', 'Vue.js,FastAPI,Redis', '/static/images/3.jpg', '#', '#'),
+                ('Weather Dashboard', 'Real-time weather monitoring dashboard with data visualization and forecasts.', 'JavaScript,Chart.js,API', '/static/images/4.webp', '#', '#')
+            ])
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.error(f"Database initialization failed: {str(e)}")
+        raise
 
 def hash_password(password: str) -> str:
     """Hash password using bcrypt"""
@@ -277,14 +313,15 @@ def delete_session(session_id: str):
     conn.commit()
     conn.close()
 
-# Initialize database on startup
-init_db()
-
 @app.get("/")
 async def home(request: Request):
-    increment_visitor()
-    visitor_count = get_visitor_count()
-    return templates.TemplateResponse("index.html", {"request": request, "visitor_count": visitor_count})
+    try:
+        increment_visitor()
+        visitor_count = get_visitor_count()
+        return templates.TemplateResponse("index.html", {"request": request, "visitor_count": visitor_count})
+    except Exception as e:
+        logger.error(f"Home page error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/about")
 async def about(request: Request):
