@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - Personal Website{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">Blog & Articles</h1>
+        
+        <div class="max-w-4xl mx-auto mb-12">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold mb-4">Latest Articles</h2>
+                <p class="text-gray-600">Sharing my thoughts on web development, design, and technology.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Blog Post 1 -->
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover reveal">
+                <img src="/static/images/2.webp" alt="Building Scalable APIs with FastAPI" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>March 15, 2024</span>
+                        <span class="mx-2">•</span>
+                        <span>5 min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Building Scalable APIs with FastAPI</h3>
+                    <p class="text-gray-600 mb-4">Learn how to create high-performance REST APIs using Python's FastAPI framework.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded">Python</span>
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-600 rounded">FastAPI</span>
+                        <span class="text-xs px-2 py-1 bg-purple-100 text-purple-600 rounded">API</span>
+                    </div>
+                    <a href="/blog/building-scalable-apis" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</a>
+                </div>
+            </article>
+
+            <!-- Blog Post 2 -->
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover reveal">
+                <img src="/static/images/3.jpg" alt="Modern CSS Techniques for 2024" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>March 10, 2024</span>
+                        <span class="mx-2">•</span>
+                        <span>8 min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Modern CSS Techniques for 2024</h3>
+                    <p class="text-gray-600 mb-4">Explore the latest CSS features and techniques for creating stunning web designs.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 bg-cyan-100 text-cyan-600 rounded">CSS</span>
+                        <span class="text-xs px-2 py-1 bg-pink-100 text-pink-600 rounded">Design</span>
+                        <span class="text-xs px-2 py-1 bg-orange-100 text-orange-600 rounded">Frontend</span>
+                    </div>
+                    <a href="/blog/modern-css-techniques" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</a>
+                </div>
+            </article>
+
+            <!-- Blog Post 3 -->
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover reveal">
+                <img src="/static/images/4.webp" alt="Database Optimization Strategies" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>March 5, 2024</span>
+                        <span class="mx-2">•</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Database Optimization Strategies</h3>
+                    <p class="text-gray-600 mb-4">Essential techniques for optimizing database performance in web applications.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 bg-red-100 text-red-600 rounded">Database</span>
+                        <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-600 rounded">Performance</span>
+                        <span class="text-xs px-2 py-1 bg-indigo-100 text-indigo-600 rounded">SQL</span>
+                    </div>
+                    <a href="/blog/database-optimization" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</a>
+                </div>
+            </article>
+
+            <!-- Blog Post 4 -->
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover reveal">
+                <img src="/static/images/5.jpg" alt="React Hooks Deep Dive" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>February 28, 2024</span>
+                        <span class="mx-2">•</span>
+                        <span>7 min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">React Hooks Deep Dive</h3>
+                    <p class="text-gray-600 mb-4">Understanding advanced React Hooks patterns and best practices for modern development.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded">React</span>
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-600 rounded">JavaScript</span>
+                        <span class="text-xs px-2 py-1 bg-purple-100 text-purple-600 rounded">Hooks</span>
+                    </div>
+                    <a href="#" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</a>
+                </div>
+            </article>
+
+            <!-- Blog Post 5 -->
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover reveal">
+                <img src="/static/images/6.webp" alt="UI/UX Design Principles" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>February 20, 2024</span>
+                        <span class="mx-2">•</span>
+                        <span>4 min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">UI/UX Design Principles</h3>
+                    <p class="text-gray-600 mb-4">Fundamental principles for creating user-centered designs that delight and convert.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 bg-pink-100 text-pink-600 rounded">Design</span>
+                        <span class="text-xs px-2 py-1 bg-cyan-100 text-cyan-600 rounded">UX</span>
+                        <span class="text-xs px-2 py-1 bg-orange-100 text-orange-600 rounded">UI</span>
+                    </div>
+                    <a href="#" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</a>
+                </div>
+            </article>
+
+            <!-- Blog Post 6 -->
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden card-hover reveal">
+                <img src="/static/images/7.jpg" alt="DevOps Best Practices" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>February 15, 2024</span>
+                        <span class="mx-2">•</span>
+                        <span>10 min read</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">DevOps Best Practices</h3>
+                    <p class="text-gray-600 mb-4">Streamlining development workflows with modern DevOps tools and methodologies.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-600 rounded">DevOps</span>
+                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded">CI/CD</span>
+                        <span class="text-xs px-2 py-1 bg-red-100 text-red-600 rounded">Docker</span>
+                    </div>
+                    <a href="#" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</a>
+                </div>
+            </article>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="mt-16 max-w-2xl mx-auto">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-8 rounded-lg text-white text-center">
+                <h3 class="text-2xl font-bold mb-4">Subscribe to My Newsletter</h3>
+                <p class="mb-6">Get the latest articles and insights delivered straight to your inbox.</p>
+                <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto" id="newsletter-form">
+                    <input type="email" id="newsletter-email" placeholder="Enter your email" required
+                           class="flex-1 px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-white">
+                    <button type="submit" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('newsletter-email').value;
+    
+    // Create success message
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+    successDiv.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span>Successfully subscribed to newsletter!</span>
+        </div>
+    `;
+    
+    document.body.appendChild(successDiv);
+    
+    // Clear form
+    document.getElementById('newsletter-email').value = '';
+    
+    // Remove message after 3 seconds
+    setTimeout(() => {
+        successDiv.remove();
+    }, 3000);
+    
+    // Here you would normally send the email to your backend
+    console.log('Newsletter subscription:', email);
+});
+</script>
+{% endblock %}

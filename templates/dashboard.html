@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard - Tony Stark{% endblock %}
+
+{% block content %}
+<!-- User Authentication Check -->
+<script>
+// Check user authentication before showing content
+document.addEventListener('DOMContentLoaded', function() {
+    const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+    
+    if (!userLoggedIn && !adminLoggedIn) {
+        // Not logged in - redirect to login
+        showNotification('Login required. Redirecting to login...', 'error');
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 2000);
+        return;
+    }
+    
+    // Verify session is still valid
+    const loginTime = localStorage.getItem('loginTime') || localStorage.getItem('adminLoginTime');
+    if (loginTime) {
+        const loginDate = new Date(loginTime);
+        const now = new Date();
+        const diffHours = (now - loginDate) / (1000 * 60 * 60);
+        
+        // Auto logout after 24 hours for users, 8 hours for admin
+        const maxHours = adminLoggedIn ? 8 : 24;
+        if (diffHours > maxHours) {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('loginTime');
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminUsername');
+            localStorage.removeItem('adminLoginTime');
+            localStorage.removeItem('adminSessionSecure');
+            showNotification('Session expired. Please login again.', 'error');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
+            return;
+        }
+    }
+    
+    console.log('Dashboard access granted for user:', localStorage.getItem('userEmail') || localStorage.getItem('adminUsername'));
+});
+
+// Notification function for dashboard
+function showNotification(message, type) {
+    type = type || 'info';
+    const notification = document.createElement('div');
+    var bgClass = 'bg-blue-600';
+    if (type === 'success') {
+        bgClass = 'bg-green-600';
+    } else if (type === 'error') {
+        bgClass = 'bg-red-600';
+    }
+    
+    notification.className = 'fixed top-4 right-4 p-4 rounded-lg text-white z-50 transform translate-x-full transition-transform ' + bgClass;
+    
+    var iconClass = 'info-circle';
+    if (type === 'success') {
+        iconClass = 'check-circle';
+    } else if (type === 'error') {
+        iconClass = 'exclamation-circle';
+    }
+    
+    notification.innerHTML = '<div class="flex items-center"><i class="fas fa-' + iconClass + ' mr-2"></i>' + message + '</div>';
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(function() {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    setTimeout(function() {
+        notification.classList.add('translate-x-full');
+        setTimeout(function() {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+</script>
+
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">User Dashboard</h1>
+        
+        <div class="max-w-6xl mx-auto">
+            <!-- Quick Stats -->
+            <div class="grid md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center reveal">
+                    <i class="fas fa-eye text-3xl text-blue-600 mb-2"></i>
+                    <div class="text-2xl font-bold text-gray-700">Profile Views</div>
+                    <div class="text-sm text-green-600">+12% this week</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center reveal">
+                    <i class="fas fa-heart text-3xl text-red-600 mb-2"></i>
+                    <div class="text-2xl font-bold text-gray-700">Total Likes</div>
+                    <div class="text-sm text-green-600">+8 this week</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center reveal">
+                    <i class="fas fa-share text-3xl text-purple-600 mb-2"></i>
+                    <div class="text-2xl font-bold text-gray-700">Shares</div>
+                    <div class="text-sm text-green-600">+5 this week</div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center reveal">
+                    <i class="fas fa-download text-3xl text-green-600 mb-2"></i>
+                    <div class="text-2xl font-bold text-gray-700">Downloads</div>
+                    <div class="text-sm text-green-600">+23 this week</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Sections -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Recent Activity -->
+                <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-lg reveal">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-clock text-purple-600 mr-2"></i>
+                        Recent Activity
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-semibold">New project published</div>
+                                <div class="text-sm text-gray-600">E-Commerce Platform</div>
+                            </div>
+                            <div class="text-sm text-green-600">2 hours ago</div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-semibold">Blog post liked</div>
+                                <div class="text-sm text-gray-600">Modern CSS Techniques</div>
+                            </div>
+                            <div class="text-sm text-green-600">5 hours ago</div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-semibold">Contact form submitted</div>
+                                <div class="text-sm text-gray-600">From John Doe</div>
+                            </div>
+                            <div class="text-sm text-green-600">1 day ago</div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-semibold">Newsletter subscription</div>
+                                <div class="text-sm text-gray-600">Jane Smith</div>
+                            </div>
+                            <div class="text-sm text-green-600">2 days ago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white p-6 rounded-lg shadow-lg reveal">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-bolt text-purple-600 mr-2"></i>
+                        Quick Actions
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="createNewProject()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-plus mr-2"></i>New Project
+                        </button>
+                        <button onclick="writeBlogPost()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-pen mr-2"></i>Write Blog Post
+                        </button>
+                        <button onclick="viewAnalytics()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-chart-line mr-2"></i>View Analytics
+                        </button>
+                        <button onclick="manageSettings()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-cog mr-2"></i>Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="bg-white p-6 rounded-lg shadow-lg reveal">
+                    <h3 class="text-xl font-semibold mb-4">
+                        <i class="fas fa-bell text-purple-600 mr-2"></i>
+                        Notifications
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded">
+                            <div>
+                                <div class="font-semibold">New comment</div>
+                                <div class="text-sm text-gray-600">On your project</div>
+                            </div>
+                            <div class="text-sm text-blue-600">Just now</div>
+                            <button class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded">
+                            <div>
+                                <div class="font-semibold">Project approved</div>
+                                <div class="text-sm text-gray-600">E-Commerce Platform</div>
+                            </div>
+                            <div class="text-sm text-green-600">1 hour ago</div>
+                            <button class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded">
+                            <div>
+                                <div class="font-semibold">New follower</div>
+                                <div class="text-sm text-gray-600">Sarah Johnson</div>
+                            </div>
+                            <div class="text-sm text-purple-600">3 hours ago</div>
+                            <button class="text-purple-600 hover:text-purple-800">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-lg reveal">
+                <h3 class="text-xl font-semibold mb-4">
+                    <i class="fas fa-chart-area text-purple-600 mr-2"></i>
+                    Performance Overview
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Profile Completion</span>
+                        <div class="flex-1 bg-gray-200 rounded-full h-4 ml-4">
+                            <div class="bg-green-500 h-4 rounded-full" style="width: 85%"></div>
+                        </div>
+                        <span class="font-semibold text-green-600">85%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Projects Completed</span>
+                        <div class="flex-1 bg-gray-200 rounded-full h-4 ml-4">
+                            <div class="bg-blue-500 h-4 rounded-full" style="width: 92%"></div>
+                        </div>
+                        <span class="font-semibold text-blue-600">92%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Client Satisfaction</span>
+                        <div class="flex-1 bg-gray-200 rounded-full h-4 ml-4">
+                            <div class="bg-purple-500 h-4 rounded-full" style="width: 100%"></div>
+                        </div>
+                        <span class="font-semibold text-purple-600">100%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Quick action functions
+function createNewProject() {
+    alert('Opening project creation interface...');
+    // window.location.href = '/projects?action=new';
+}
+
+function writeBlogPost() {
+    alert('Opening blog editor...');
+    // window.location.href = '/blog?action=new';
+}
+
+function viewAnalytics() {
+    window.location.href = '/analytics';
+}
+
+function manageSettings() {
+    alert('Opening settings panel...');
+    // window.location.href = '/settings';
+}
+
+// Dismiss notifications
+function dismissNotification(notificationId) {
+    const notification = document.getElementById(notificationId);
+    if (notification) {
+        notification.parentElement.remove();
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Tony Stark{% endblock %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-600">
+    <div class="container mx-auto px-6">
+        <div class="max-w-md mx-auto">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 reveal">
+                <!-- Logo -->
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold gradient-text mb-2">Create Account</h1>
+                    <p class="text-gray-600">Join our community today</p>
+                </div>
+
+                <!-- Registration Form -->
+                <form id="register-form" method="post" action="/register" class="space-y-6">
+                    <!-- Name -->
+                    <div>
+                        <label for="fullname" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-user text-purple-600 mr-2"></i>Full Name
+                        </label>
+                        <input type="text" id="fullname" name="fullname" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                               placeholder="John Doe">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-envelope text-purple-600 mr-2"></i>Email Address
+                        </label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                               placeholder="john@example.com">
+                    </div>
+
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-at text-purple-600 mr-2"></i>Username
+                        </label>
+                        <input type="text" id="username" name="username" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                               placeholder="johndoe">
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock text-purple-600 mr-2"></i>Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600">
+                                <i class="fas fa-eye" id="password-toggle"></i>
+                            </button>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-xs text-gray-600">Password strength:</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div id="password-strength" class="h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock text-purple-600 mr-2"></i>Confirm Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="confirm-password" name="confirm-password" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="toggleConfirmPassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-purple-600">
+                                <i class="fas fa-eye" id="confirm-password-toggle"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms" name="terms" required class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 mt-1">
+                        <label for="terms" class="ml-2 text-sm text-gray-600">
+                            I agree to the <a href="#" class="text-purple-600 hover:text-purple-700">Terms of Service</a> and <a href="#" class="text-purple-600 hover:text-purple-700">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <div class="flex items-center">
+                        <input type="checkbox" id="newsletter" name="newsletter" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
+                        <label for="newsletter" class="ml-2 text-sm text-gray-600">
+                            Subscribe to newsletter for updates
+                        </label>
+                    </div>
+
+                    <!-- Register Button -->
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or register with</span>
+                        </div>
+                    </div>
+
+                    <!-- Social Registration -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="button" class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            <i class="fab fa-google text-red-500"></i>
+                        </button>
+                        <button type="button" class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            <i class="fab fa-github text-gray-800"></i>
+                        </button>
+                        <button type="button" class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                            <i class="fab fa-linkedin text-blue-600"></i>
+                        </button>
+                    </div>
+
+                    <!-- Login Link -->
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Already have an account? 
+                            <a href="/login" class="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
+                                Sign in here
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Admin Registration Link -->
+            <div class="text-center mt-6">
+                <a href="/admin-register" class="text-white hover:text-purple-200 transition-colors">
+                    <i class="fas fa-shield-alt mr-2"></i>Admin Registration
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Password toggle
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.getElementById('password-toggle');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+    }
+}
+
+function toggleConfirmPassword() {
+    const passwordInput = document.getElementById('confirm-password');
+    const passwordToggle = document.getElementById('confirm-password-toggle');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+    }
+}
+
+// Password strength checker
+function checkPasswordStrength(password) {
+    const strengthBar = document.getElementById('password-strength');
+    let strength = 0;
+    
+    if (password.length >= 8) strength += 25;
+    if (password.match(/[a-z]/)) strength += 25;
+    if (password.match(/[A-Z]/)) strength += 25;
+    if (password.match(/[0-9]/)) strength += 25;
+    
+    strengthBar.style.width = strength + '%';
+    
+    if (strength <= 25) {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-red-500';
+    } else if (strength <= 50) {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-yellow-500';
+    } else if (strength <= 75) {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-blue-500';
+    } else {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-green-500';
+    }
+}
+
+// Password input listener
+document.getElementById('password').addEventListener('input', function(e) {
+    checkPasswordStrength(e.target.value);
+});
+
+// Registration form submission
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const fullname = document.getElementById('fullname').value;
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const terms = document.getElementById('terms').checked;
+
+    // Validation
+    if (password !== confirmPassword) {
+        showNotification('Passwords do not match!', 'error');
+        return;
+    }
+    
+    if (!terms) {
+        showNotification('Please accept the terms and conditions', 'error');
+        return;
+    }
+
+    // Keep UX loading state
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+    submitButton.disabled = true;
+
+    // Submit to backend endpoint
+    e.target.submit();
+
+    // In case of immediate failure, restore button state after a short delay
+    setTimeout(() => {
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+    }, 1800);
+});
+        showNotification('Account created successfully! Redirecting...', 'success');
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+            window.location.href = '/dashboard';
+        }, 1500);
+    }, 2000);
+});
+
+// Check if already logged in
+document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('userLoggedIn') === 'true') {
+        window.location.href = '/dashboard';
+    }
+});
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 transform translate-x-full transition-transform ${
+        type === 'success' ? 'bg-green-600' : 
+        type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+    }`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+</script>
+
+<style>
+/* Registration-specific styles */
+.min-h-screen {
+    min-height: 100vh;
+}
+
+/* Form enhancements */
+input:focus {
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Button animations */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+}
+
+/* Social button hover effects */
+.grid button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading state */
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Password strength bar */
+#password-strength {
+    transition: all 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .max-w-md {
+        margin: 1rem;
+    }
+    
+    .bg-white {
+        padding: 2rem;
+    }
+}
+</style>
+{% endblock %}

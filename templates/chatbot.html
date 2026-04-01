@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block title %}AI Assistant - Tony Stark{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">AI Assistant</h1>
+        
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8 reveal">
+                <h2 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-robot text-purple-600 mr-3"></i>
+                    Meet Your AI Assistant
+                </h2>
+                <p class="text-gray-600 mb-6">I'm here to help you 24/7! Ask me anything about Tony Stark, his projects, or technical questions.</p>
+                
+                <!-- Chat Interface -->
+                <div class="bg-gray-50 rounded-lg p-4 h-96 overflow-hidden">
+                    <div id="chat-messages" class="space-y-4 h-80 overflow-y-auto mb-4">
+                        <!-- AI Welcome Message -->
+                        <div class="flex items-start space-x-3 mb-4">
+                            <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg max-w-md">
+                                <p class="text-gray-700">Hello! I'm Tony's AI assistant. How can I help you today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Input -->
+                    <div class="flex space-x-2">
+                        <input type="text" id="user-input" placeholder="Type your message..." 
+                               class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                        <button id="send-message" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-paper-plane mr-2"></i>Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-6 rounded-lg reveal">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-magic text-purple-600 mr-2"></i>
+                        Quick Actions
+                    </h3>
+                    <div class="space-y-3">
+                        <button onclick="askAbout()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-user mr-3"></i>Tell me about Tony
+                        </button>
+                        <button onclick="askProjects()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-folder-open mr-3"></i>Show recent projects
+                        </button>
+                        <button onclick="askSkills()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-code mr-3"></i>Technical skills & expertise
+                        </button>
+                        <button onclick="askExperience()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-briefcase mr-3"></i>Career experience
+                        </button>
+                        <button onclick="askPricing()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-dollar-sign mr-3"></i>Pricing & services
+                        </button>
+                        <button onclick="askContact()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-envelope mr-3"></i>How to contact Tony
+                        </button>
+                        <button onclick="askAdvice()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-lightbulb mr-3"></i>Career advice
+                        </button>
+                        <button onclick="askTech()" class="w-full text-left px-4 py-3 bg-white hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-rocket mr-3"></i>Tech recommendations
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg reveal">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-lightbulb text-purple-600 mr-2"></i>
+                        Capabilities
+                    </h3>
+                    <div class="space-y-2 text-sm text-gray-600">
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>24/7 Availability</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Natural Language Processing</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Multi-language Support</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Real-time Responses</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span>Context Awareness</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+let conversationHistory = [];
+let isTyping = false;
+
+// Send message function
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const message = input.value.trim();
+    
+    if (message === '') return;
+    
+    // Add user message to chat
+    addMessage('user', message);
+    input.value = '';
+    
+    // Simulate AI response
+    isTyping = true;
+    showTypingIndicator();
+    
+    setTimeout(() => {
+        isTyping = false;
+        hideTypingIndicator();
+        
+        // Generate AI response based on message
+        const response = generateAIResponse(message);
+        addMessage('ai', response);
+    }, 1500);
+}
+
+// Add message to chat
+function addMessage(sender, message) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    
+    if (sender === 'user') {
+        messageDiv.className = 'flex items-start space-x-3 mb-4';
+        messageDiv.innerHTML = `
+            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="bg-white p-3 rounded-lg max-w-md">
+                <p class="text-gray-700">${message}</p>
+            </div>
+        `;
+    } else {
+        messageDiv.className = 'flex items-start space-x-3 mb-4';
+        messageDiv.innerHTML = `
+            <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="bg-purple-50 p-3 rounded-lg max-w-md">
+                <p class="text-gray-700">${message}</p>
+            </div>
+        `;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Typing indicator
+function showTypingIndicator() {
+    const chatMessages = document.getElementById('chat-messages');
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'flex items-start space-x-3 mb-4';
+    typingDiv.innerHTML = `
+        <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white">
+            <i class="fas fa-robot animate-pulse"></i>
+        </div>
+        <div class="bg-purple-50 p-3 rounded-lg">
+            <p class="text-gray-500 italic">AI is typing...</p>
+        </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const typingIndicators = document.querySelectorAll('.animate-pulse');
+    typingIndicators.forEach(indicator => {
+        indicator.parentElement.parentElement.remove();
+    });
+}
+
+// Generate AI responses
+function generateAIResponse(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Comprehensive knowledge base
+    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+        return "Hello! I'm Tony's advanced AI assistant. I can help you with information about Tony's skills, projects, career, technical expertise, or answer general questions about web development and technology. What would you like to know?";
+    }
+    
+    // About Tony Stark - Comprehensive
+    if (lowerMessage.includes('about') || lowerMessage.includes('who is') || lowerMessage.includes('tony')) {
+        return "Tony Stark is a passionate full-stack developer and technology enthusiast with 5+ years of professional experience. He specializes in Python, FastAPI, React, and modern web technologies. Tony has successfully delivered over 50 projects with 100% client satisfaction, focusing on scalable web applications, API development, and innovative solutions. He's known for clean code, performance optimization, and staying current with cutting-edge technologies. Tony is also passionate about mentoring, contributing to open-source projects, and continuously expanding his technical expertise.";
+    }
+    
+    // Projects - Detailed
+    if (lowerMessage.includes('projects') || lowerMessage.includes('portfolio') || lowerMessage.includes('work')) {
+        return "Tony has worked on diverse projects including: 🚀 E-Commerce Platforms (React/Node.js), 📊 Task Management Apps (FastAPI/React), 🌤️ Weather Dashboards (Python/API integration), 💪 Fitness Trackers (Mobile-first design), 🏦 Banking Applications (Security-focused), 📱 Social Media Platforms (Real-time features), 🎯 Marketing Automation Tools, 📚 Learning Management Systems, 🏪 Booking Systems, and 🎨 Creative Design Portfolios. Each project showcases expertise in performance optimization, responsive design, and user experience. Would you like details about any specific project?";
+    }
+    
+    // Skills - Technical Details
+    if (lowerMessage.includes('skills') || lowerMessage.includes('technologies') || lowerMessage.includes('tech stack')) {
+        return "Tony's technical expertise includes: 🐍 **Python (95%)** - FastAPI, Django, Flask, Data Science, Machine Learning; ⚛️ **JavaScript/React (90%)** - Modern ES6+, Redux, Next.js, Vue.js; 🎨 **Frontend (95%)** - HTML5, CSS3, Tailwind CSS, Bootstrap, Responsive Design; 🗄️ **Databases (85%)** - PostgreSQL, MongoDB, MySQL, Redis; 🚀 **DevOps (80%)** - Docker, CI/CD, AWS, Git; 🎯 **UI/UX Design (80%)** - Figma, Adobe XD, User Research; 📱 **Mobile (75%)** - React Native, Progressive Web Apps; 🔒 **Security (85%)** - JWT, OAuth, Best Practices; 📊 **Testing (85%)** - Jest, Pytest, Unit/Integration Tests.";
+    }
+    
+    // Education & Background
+    if (lowerMessage.includes('education') || lowerMessage.includes('degree') || lowerMessage.includes('university') || lowerMessage.includes('college')) {
+        return "Tony holds a Bachelor's degree in Computer Science with specialization in Web Technologies. He's completed numerous certifications including: 🎓 AWS Solutions Architect, 🎓 Google Cloud Professional, 🎓 React Advanced Concepts, 🎓 Full-Stack Development Bootcamp, 🎓 Machine Learning Fundamentals. Tony believes in continuous learning and regularly attends tech conferences, workshops, and online courses to stay updated with the latest industry trends and best practices.";
+    }
+    
+    // Experience - Career Details
+    if (lowerMessage.includes('experience') || lowerMessage.includes('career') || lowerMessage.includes('job') || lowerMessage.includes('work history')) {
+        return "Tony's professional journey includes: 💼 **Senior Full-Stack Developer** at Tech Innovations Inc. (2022-Present) - Leading development of enterprise applications; 💼 **Full-Stack Developer** at Digital Solutions Co. (2020-2022) - Built scalable web applications; 💼 **Junior Developer** at StartUp Hub (2019-2020) - Developed MVPs for startups; 🎓 **Freelance Consultant** (2018-Present) - Helping businesses with digital transformation. Key achievements: Led 10+ successful project launches, mentored 20+ junior developers, improved application performance by 40%, and maintained 100% client satisfaction rate.";
+    }
+    
+    // Contact & Availability
+    if (lowerMessage.includes('contact') || lowerMessage.includes('email') || lowerMessage.includes('hire') || lowerMessage.includes('available')) {
+        return "Tony is available for exciting projects and collaborations! 📧 **Email**: tony@tonystark.com, 📱 **Phone**: +1 (555) 123-4567, 💼 **LinkedIn**: linkedin.com/in/tonystark, 🐙 **GitHub**: github.com/tonystark, 🐦 **Twitter**: @tonystark_dev. Response time: within 24 hours. Services offered: Full-stack development, API design, performance optimization, technical consulting, code reviews, and mentoring. Tony works with startups, established companies, and open-source projects. Need a quick quote or want to discuss your project? Just reach out!";
+    }
+    
+    // Technical Questions - Web Development
+    if (lowerMessage.includes('fastapi') || lowerMessage.includes('api') || lowerMessage.includes('backend')) {
+        return "Tony is a FastAPI expert! 🐍 FastAPI is his go-to framework for building high-performance REST APIs. Key advantages: Automatic OpenAPI documentation, type hints for better code quality, async support for high performance, dependency injection system, and excellent testing capabilities. Tony has built APIs handling millions of requests, implemented JWT authentication, database integrations, WebSocket connections, and microservices architecture. Best practices he follows: Use Pydantic for data validation, implement proper error handling, add rate limiting, use environment variables, and write comprehensive tests. Need specific FastAPI help?";
+    }
+    
+    if (lowerMessage.includes('react') || lowerMessage.includes('frontend') || lowerMessage.includes('javascript')) {
+        return "Tony excels at React development! ⚛️ He builds modern, performant React applications using hooks, context API, and latest best practices. Expertise includes: Component architecture, state management (Redux, Zustand), performance optimization, code splitting, lazy loading, and server-side rendering. Tony has implemented complex features like real-time dashboards, e-commerce platforms, social media feeds, and progressive web apps. He follows React best practices: functional components, custom hooks, proper prop types, accessibility (ARIA), and testing with Jest/React Testing Library. What React challenge are you facing?";
+    }
+    
+    if (lowerMessage.includes('database') || lowerMessage.includes('sql') || lowerMessage.includes('mongodb')) {
+        return "Database expertise is one of Tony's strengths! 🗄️ He works with both SQL (PostgreSQL, MySQL) and NoSQL (MongoDB, Redis) databases. Skills include: Database design, query optimization, indexing strategies, migrations, and performance tuning. Tony has designed schemas for complex applications, implemented caching strategies, handled database sharding, and set up replication. Best practices: Use proper indexing, normalize when appropriate, implement connection pooling, use transactions for data integrity, and regularly backup data. Need database architecture advice?";
+    }
+    
+    // General Tech Questions
+    if (lowerMessage.includes('best practices') || lowerMessage.includes('tips') || lowerMessage.includes('advice')) {
+        return "Tony's top development best practices: 🎯 **Code Quality**: Write clean, readable code with proper documentation; 🧪 **Testing**: Implement unit, integration, and E2E tests; 🚀 **Performance**: Optimize for Core Web Vitals and user experience; 🔒 **Security**: Follow OWASP guidelines and implement proper authentication; 📱 **Responsive**: Design for all devices and screen sizes; 🔄 **CI/CD**: Automate testing and deployment; 📊 **Monitoring**: Implement logging and performance monitoring; 🎨 **UX/UI**: Focus on user experience and accessibility; 📚 **Learning**: Stay updated with industry trends; 🤝 **Collaboration**: Use version control and code reviews. Always prioritize user needs and maintainable code!";
+    }
+    
+    // Career Advice
+    if (lowerMessage.includes('career') || lowerMessage.includes('learn') || lowerMessage.includes('become developer')) {
+        return "Tony's career advice for aspiring developers: 🎓 **Foundation**: Master HTML, CSS, JavaScript fundamentals; 🐍 **Backend**: Learn Python and a framework like FastAPI or Django; ⚛️ **Frontend**: Study React or Vue.js; 🗄️ **Databases**: Understand SQL and NoSQL concepts; 🚀 **Tools**: Git, Docker, and cloud platforms; 📚 **Resources**: FreeCodeCamp, MDN docs, YouTube tutorials, coding challenges; 🏗️ **Projects**: Build real applications for your portfolio; 🤝 **Networking**: Join tech communities and attend meetups; 💼 **Jobs**: Start with internships or freelance work; 📈 **Growth**: Never stop learning and stay curious. Remember: Consistency beats intensity, and building actual projects is the best way to learn!";
+    }
+    
+    // Pricing & Services
+    if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('rates') || lowerMessage.includes('freelance')) {
+        return "Tony offers competitive rates based on project complexity and timeline: 💼 **Full-Stack Development**: $75-150/hour, 🏗️ **API Development**: $80-120/hour, 🎨 **Frontend Development**: $60-100/hour, 🔧 **Consulting**: $100-200/hour, 📚 **Mentoring**: $50-80/hour. Project-based pricing available for larger engagements. Tony offers: ✅ Free initial consultation, ✅ Detailed project proposals, ✅ Flexible payment terms, ✅ Post-launch support, ✅ Code documentation, ✅ Performance optimization. Discounts available for: Non-profits, startups, long-term projects, and open-source contributions. Want a custom quote for your project?";
+    }
+    
+    // Availability & Timeline
+    if (lowerMessage.includes('timeline') || lowerMessage.includes('when') || lowerMessage.includes('start') || lowerMessage.includes('deadline')) {
+        return "Tony's project timelines vary based on complexity: 🚀 **Small Projects** (1-2 weeks): Landing pages, simple APIs, basic websites; 🏗️ **Medium Projects** (3-8 weeks): E-commerce platforms, complex applications, custom APIs; 🌟 **Large Projects** (2-6 months): Enterprise applications, multi-platform solutions; 📱 **Ongoing**: Maintenance, support, and feature development. Current availability: ✅ Open for new projects, ✅ Flexible start dates, ✅ Part-time and full-time engagements, ✅ Emergency support available. Tony typically starts new projects within 1-2 weeks and provides regular progress updates. What's your project timeline?";
+    }
+    
+    // Technology Recommendations
+    if (lowerMessage.includes('recommend') || lowerMessage.includes('suggest') || lowerMessage.includes('what should')) {
+        return "Tony's technology recommendations depend on your project needs: 🚀 **For Startups**: React + FastAPI + PostgreSQL + AWS (scalable, cost-effective); 🏢 **For Enterprise**: Next.js + Node.js + MongoDB + Azure (robust, secure); 📱 **For Mobile Apps**: React Native + Firebase (cross-platform); 🛒 **For E-commerce**: Next.js + Stripe + PostgreSQL (secure, reliable); 📊 **For Analytics**: Python + FastAPI + Redis + BigQuery (data processing); 🎨 **For Portfolios**: Gatsby/Next.js + Netlify (simple, fast). Always consider: team expertise, scalability needs, budget, timeline, and maintenance requirements. Need specific tech stack advice for your project?";
+    }
+    
+    // Problem Solving
+    if (lowerMessage.includes('problem') || lowerMessage.includes('issue') || lowerMessage.includes('bug') || lowerMessage.includes('help')) {
+        return "Tony loves solving technical problems! 🔍 **Common issues he helps with**: Performance optimization, API design, database queries, React state management, deployment issues, security vulnerabilities, code refactoring, and architecture decisions. **His approach**: 1️⃣ Understand the problem thoroughly, 2️⃣ Analyze root causes, 3️⃣ Research best practices, 4️⃣ Implement solutions, 5️⃣ Test thoroughly, 6️⃣ Document and share knowledge. Tony has solved complex challenges like: Scaling applications to handle 1M+ users, optimizing database queries by 90%, reducing bundle size by 70%, and improving Core Web Vitals scores. What specific technical challenge are you facing?";
+    }
+    
+    // Future & Trends
+    if (lowerMessage.includes('future') || lowerMessage.includes('trends') || lowerMessage.includes('next') || lowerMessage.includes('upcoming')) {
+        return "Tony stays ahead of technology trends! 🔮 **Emerging technologies he's excited about**: AI/ML integration in web apps, WebAssembly for performance, Edge computing, Serverless architecture, Progressive Web Apps 2.0, GraphQL for APIs, JAMstack frameworks, Low-code/no-code platforms, Web3/blockchain applications, and AR/VR web experiences. **Skills he's developing**: Advanced AI integration, Cloud-native development, DevOps automation, Cybersecurity, and Quantum computing basics. **Advice for staying current**: Follow tech blogs, contribute to open source, attend conferences, experiment with new technologies, and build side projects. The future is exciting - what area interests you most?";
+    }
+    
+    // General Knowledge - Geography
+    if (lowerMessage.includes('capital') || lowerMessage.includes('country') || lowerMessage.includes('city') || lowerMessage.includes('france') || lowerMessage.includes('paris')) {
+        if (lowerMessage.includes('france')) {
+            return "🇫🇷 The capital of France is **Paris**! Paris is known as the 'City of Light' and is famous for the Eiffel Tower, Louvre Museum, Notre-Dame Cathedral, and romantic atmosphere. It's also a major center for art, fashion, gastronomy, and culture.";
+        } else if (lowerMessage.includes('japan') || lowerMessage.includes('tokyo')) {
+            return "🇯🇵 The capital of Japan is **Tokyo**! Tokyo is the world's most populous metropolitan area, known for its blend of traditional culture and cutting-edge technology. Famous landmarks include Tokyo Tower, Shibuya Crossing, and the Imperial Palace.";
+        } else if (lowerMessage.includes('italy') || lowerMessage.includes('rome')) {
+            return "🇮🇹 The capital of Italy is **Rome**! Rome is known as the 'Eternal City' and is famous for ancient landmarks like the Colosseum, Roman Forum, and Vatican City. It has a history spanning over 2,800 years.";
+        } else if (lowerMessage.includes('uk') || lowerMessage.includes('united kingdom') || lowerMessage.includes('london')) {
+            return "🇬🇧 The capital of the United Kingdom is **London**! London is a global city known for Big Ben, Tower Bridge, Buckingham Palace, the British Museum, and being a major financial center.";
+        } else if (lowerMessage.includes('usa') || lowerMessage.includes('america') || lowerMessage.includes('washington')) {
+            return "🇺🇸 The capital of the United States is **Washington, D.C.**! It's known for the White House, Capitol Building, Lincoln Memorial, and numerous Smithsonian museums.";
+        } else {
+            return "I can help with geography! 🌍 Some major capitals I know: Paris (France), Tokyo (Japan), Rome (Italy), London (UK), Washington D.C. (USA), Berlin (Germany), Madrid (Spain), Beijing (China), Moscow (Russia), and many more! Which country are you interested in?";
+        }
+    }
+    
+    // General Knowledge - Science & Technology
+    if (lowerMessage.includes('internet') && lowerMessage.includes('invent')) {
+        return "🌐 The internet was invented by **Vint Cerf and Bob Kahn** in the 1970s! They developed the TCP/IP protocol suite, which became the foundation of modern internet communication. However, many other pioneers contributed: Tim Berners-Lee created the World Wide Web in 1989, ARPANET was the first operational network, and Ray Tomlinson invented email in 1971. The internet evolved from military and academic research into the global network we use today!";
+    } else if (lowerMessage.includes('gravity') || lowerMessage.includes('newton')) {
+        return "🍎 **Sir Isaac Newton** discovered the law of universal gravitation in 1687! Legend says he was inspired when he saw an apple fall from a tree, leading him to realize that the same force pulling the apple down also keeps the Moon in orbit around Earth. His three laws of motion and law of universal gravitation became fundamental principles of physics that we still use today!";
+    } else if (lowerMessage.includes('light') && lowerMessage.includes('speed')) {
+        return "💡 The speed of light is **299,792,458 meters per second** (approximately 186,282 miles per second)! This is the fastest speed possible in the universe according to Einstein's theory of relativity. Light from the Sun takes about 8 minutes and 20 seconds to reach Earth, and light from the nearest star (Proxima Centauri) takes over 4 years!";
+    } else if (lowerMessage.includes('dna') || lowerMessage.includes('genetics')) {
+        return "🧬 **DNA (Deoxyribonucleic acid)** was discovered by **James Watson and Francis Crick** in 1953, with crucial contributions from Rosalind Franklin and Maurice Wilkins! DNA is the molecule that carries genetic instructions for all living organisms. It has a double helix structure and contains the genetic blueprint that determines our traits.";
+    }
+    
+    // General Knowledge - History
+    if (lowerMessage.includes('pyramid') || lowerMessage.includes('egypt')) {
+        return "🔺 The **Great Pyramids of Giza** were built around 2580-2560 BCE during the Fourth Dynasty of Ancient Egypt! The largest pyramid (Khufu's Pyramid) is one of the Seven Wonders of the Ancient World and originally stood 146.5 meters tall. These pyramids served as tombs for pharaohs and were built with incredible precision - some stones weigh over 80 tons!";
+    } else if (lowerMessage.includes('world war') || lowerMessage.includes('ww2')) {
+        return "🌍 **World War II** lasted from 1939 to 1945 and involved over 30 countries! It was the deadliest conflict in human history with an estimated 70-85 million fatalities. Key events include the Holocaust, D-Day (June 6, 1944), and the atomic bombings of Hiroshima and Nagasaki. The war ended with the defeat of Nazi Germany and Imperial Japan.";
+    } else if (lowerMessage.includes('renaissance') || lowerMessage.includes('da vinci')) {
+        return "🎨 The **Renaissance** was a cultural movement from the 14th to 17th centuries that began in Italy! **Leonardo da Vinci** (1452-1519) was a quintessential Renaissance man - painter of the Mona Lisa and Last Supper, inventor, scientist, and engineer. The Renaissance saw incredible advances in art, science, literature, and philosophy, transitioning Europe from medieval to modern times.";
+    }
+    
+    // General Knowledge - Entertainment
+    if (lowerMessage.includes('movie') && (lowerMessage.includes('highest grossing') || lowerMessage.includes('popular'))) {
+        return "🎬 The highest-grossing movie of all time is **Avatar (2009)** with over $2.9 billion worldwide! Other top-grossing films include Avengers: Endgame, Titanic, Star Wars: The Force Awakens, and Avatar: The Way of Water. These films showcase the power of modern cinema and visual effects technology.";
+    } else if (lowerMessage.includes('beatles') || lowerMessage.includes('music')) {
+        return "🎵 **The Beatles** were a legendary rock band from Liverpool, England, formed in 1960! Members included John Lennon, Paul McCartney, George Harrison, and Ringo Starr. They revolutionized popular music with hits like 'Hey Jude,' 'Let It Be,' and 'Yesterday.' They're the best-selling music artists of all time with over 600 million records sold worldwide!";
+    } else if (lowerMessage.includes('shakespeare') || lowerMessage.includes('hamlet')) {
+        return "🎭 **William Shakespeare** (1564-1616) is widely considered the greatest writer in the English language! He wrote 37 plays and 154 sonnets, including masterpieces like 'Hamlet,' 'Romeo and Juliet,' 'Macbeth,' and 'Othello.' His works have been translated into every major language and continue to be performed worldwide over 400 years later!";
+    }
+    
+    // General Knowledge - Science Facts
+    if (lowerMessage.includes('moon') || lowerMessage.includes('lunar')) {
+        return "🌙 The Moon is Earth's only natural satellite, located about 238,855 miles away! It takes 27.3 days to orbit Earth and the same time to rotate on its axis (that's why we always see the same side!). The Moon influences Earth's tides and has phases due to its position relative to the Sun. Humans first walked on the Moon during Apollo 11 in 1969!";
+    } else if (lowerMessage.includes('ocean') && lowerMessage.includes('deepest')) {
+        return "🌊 The deepest part of the ocean is the **Mariana Trench**, specifically the **Challenger Deep** at about 11,000 meters (36,000 feet) deep! That's deeper than Mount Everest is tall. The pressure there is over 1,000 times that at sea level, and very few organisms can survive in such extreme conditions.";
+    } else if (lowerMessage.includes('atom') || lowerMessage.includes('element')) {
+        return "⚛️ An **atom** is the basic unit of matter, consisting of a nucleus (protons and neutrons) surrounded by electrons! There are 118 confirmed chemical elements, from Hydrogen (1 proton) to Oganesson (118 protons). Everything in the universe is made of atoms, which combine to form molecules and create all the matter we see around us!";
+    }
+    
+    // General Knowledge - Sports
+    if (lowerMessage.includes('football') || lowerMessage.includes('soccer')) {
+        return "⚽ **Football (soccer)** is the world's most popular sport with over 4 billion fans! The FIFA World Cup is the most-watched sporting event globally. The sport originated in England in the 19th century, and the modern game is governed by FIFA. Brazil has won the most World Cups (5 times), and players like Pelé, Maradona, and Messi are considered legends of the sport!";
+    } else if (lowerMessage.includes('basketball') || lowerMessage.includes('nba')) {
+        return "🏀 **Basketball** was invented by **James Naismith** in 1891 in Springfield, Massachusetts! The NBA (National Basketball Association) is the world's premier basketball league. Michael Jordan is widely considered the greatest player of all time, though LeBron James, Kobe Bryant, and many others have also left incredible legacies. The sport is known for its fast pace and incredible athleticism!";
+    } else if (lowerMessage.includes('olympics')) {
+        return "🏅 The **Olympic Games** originated in ancient Greece around 776 BCE and were revived in 1896! The modern Olympics feature Summer and Winter Games held every four years. The International Olympic Committee oversees the games, which promote international peace and athletic excellence. The Olympic motto is 'Faster, Higher, Stronger - Together'!";
+    }
+    
+    // General Knowledge - Food & Culture
+    if (lowerMessage.includes('pizza') || lowerMessage.includes('italian food')) {
+        return "🍕 **Pizza** originated in Naples, Italy! The modern pizza was developed in the 18th-19th centuries, with the Margherita pizza (tomato, mozzarella, basil) named after Queen Margherita of Italy in 1889. Pizza became globally popular after World War II when American soldiers stationed in Italy brought the concept home. Today, it's one of the world's favorite foods!";
+    } else if (lowerMessage.includes('sushi') || lowerMessage.includes('japanese food')) {
+        return "🍱 **Sushi** is a traditional Japanese dish that originated as a way to preserve fish in fermented rice! Modern sushi (nigiri) was developed in the 19th century by Hanaya Yohei in Edo (modern Tokyo). It typically consists of vinegared rice combined with raw fish, seafood, or vegetables. Sushi has become a global culinary phenomenon known for its artistry and fresh ingredients!";
+    }
+    
+    // Default fallback with suggestions
+    return `I understand you're asking about "${message}". I can help you with comprehensive information about Tony Stark including his skills, projects, experience, education, career advice, technical expertise, pricing, availability, and much more! 
+
+**Popular topics I can discuss:**
+👤 About Tony's background and expertise
+🚀 Recent projects and portfolio
+💻 Technical skills and technologies
+📞 Contact information and hiring
+🎓 Education and certifications
+💼 Career experience
+🔧 Development best practices
+💰 Pricing and services
+📈 Project timelines
+🔮 Future technology trends
+
+**I can also answer general questions about:**
+🌍 World geography and countries
+📚 Science and technology
+🎭 Entertainment and movies
+🏛️ History and culture
+⚽ Sports and games
+🍕 Food and cuisine
+🎨 Art and literature
+🌟 Famous people and celebrities
+📖 General knowledge and trivia
+
+Try asking me something specific like "What's the capital of France?", "Who invented the internet?", or "Tell me about Tony's React projects"!`;
+}
+
+// Quick action functions
+function askAbout() {
+    addMessage('user', 'Tell me about Tony');
+}
+
+function askProjects() {
+    addMessage('user', 'Show me recent projects');
+}
+
+function askSkills() {
+    addMessage('user', 'What are Tony\'s technical skills and expertise?');
+}
+
+function askExperience() {
+    addMessage('user', 'What is Tony\'s career experience?');
+}
+
+function askPricing() {
+    addMessage('user', 'What are Tony\'s rates and pricing?');
+}
+
+function askContact() {
+    addMessage('user', 'How can I contact Tony Stark?');
+}
+
+function askAdvice() {
+    addMessage('user', 'What career advice can you give for aspiring developers?');
+}
+
+function askTech() {
+    addMessage('user', 'What technologies do you recommend for web development?');
+}
+
+// Enter key support
+document.getElementById('user-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Send button
+document.getElementById('send-message').addEventListener('click', sendMessage);
+</script>
+
+<style>
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+</style>
+{% endblock %}

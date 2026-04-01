@@ -1,0 +1,460 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Register - Tony Stark{% endblock %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-600 to-orange-600">
+    <div class="container mx-auto px-6">
+        <div class="max-w-md mx-auto">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 reveal">
+                <!-- Admin Logo -->
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 pulse-glow">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold gradient-text mb-2">Admin Registration</h1>
+                    <p class="text-gray-600">Create administrator account</p>
+                </div>
+
+                <!-- Admin Registration Form -->
+                <form id="admin-register-form" class="space-y-6">
+                    <!-- Admin Code -->
+                    <div>
+                        <label for="admin-code" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-key text-red-600 mr-2"></i>Admin Registration Code
+                        </label>
+                        <input type="text" id="admin-code" name="admin-code" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                               placeholder="Enter admin code">
+                        <p class="text-xs text-gray-500 mt-1">Contact system administrator for registration code</p>
+                    </div>
+
+                    <!-- Full Name -->
+                    <div>
+                        <label for="admin-fullname" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-user text-red-600 mr-2"></i>Full Name
+                        </label>
+                        <input type="text" id="admin-fullname" name="fullname" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                               placeholder="Admin Name">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="admin-email" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-envelope text-red-600 mr-2"></i>Admin Email
+                        </label>
+                        <input type="email" id="admin-email" name="email" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                               placeholder="admin@example.com">
+                    </div>
+
+                    <!-- Username -->
+                    <div>
+                        <label for="admin-username" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-at text-red-600 mr-2"></i>Admin Username
+                        </label>
+                        <input type="text" id="admin-username" name="username" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                               placeholder="admin">
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock text-red-600 mr-2"></i>Admin Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="admin-password" name="password" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="toggleAdminPassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600">
+                                <i class="fas fa-eye" id="admin-password-toggle"></i>
+                            </button>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-xs text-gray-600">Password strength:</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                <div id="admin-password-strength" class="h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label for="admin-confirm-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock text-red-600 mr-2"></i>Confirm Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="admin-confirm-password" name="confirm-password" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="toggleAdminConfirmPassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600">
+                                <i class="fas fa-eye" id="admin-confirm-password-toggle"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Department/Role -->
+                    <div>
+                        <label for="admin-role" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-briefcase text-red-600 mr-2"></i>Department/Role
+                        </label>
+                        <select id="admin-role" name="role" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all">
+                            <option value="">Select Role</option>
+                            <option value="super-admin">Super Administrator</option>
+                            <option value="admin">Administrator</option>
+                            <option value="moderator">Moderator</option>
+                            <option value="developer">Developer</option>
+                            <option value="content-manager">Content Manager</option>
+                        </select>
+                    </div>
+
+                    <!-- Security Questions -->
+                    <div>
+                        <label for="security-question" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-question-circle text-red-600 mr-2"></i>Security Question
+                        </label>
+                        <select id="security-question" name="security-question" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all">
+                            <option value="">Select Security Question</option>
+                            <option value="pet">What was your first pet's name?</option>
+                            <option value="school">What elementary school did you attend?</option>
+                            <option value="city">In what city were you born?</option>
+                            <option value="mother">What is your mother's maiden name?</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="security-answer" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-lock text-red-600 mr-2"></i>Security Answer
+                        </label>
+                        <input type="text" id="security-answer" name="security-answer" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all"
+                               placeholder="Enter your answer">
+                    </div>
+
+                    <!-- Admin Terms -->
+                    <div class="flex items-start">
+                        <input type="checkbox" id="admin-terms" name="terms" required class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500 mt-1">
+                        <label for="admin-terms" class="ml-2 text-sm text-gray-600">
+                            I acknowledge that I am applying for administrative privileges and understand the responsibilities involved. I agree to the <a href="#" class="text-red-600 hover:text-red-700">Admin Terms of Service</a>.
+                        </label>
+                    </div>
+
+                    <!-- Register Button -->
+                    <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-orange-600 text-white py-3 rounded-lg font-semibold hover:from-red-700 hover:to-orange-700 transition-all transform hover:scale-105">
+                        <i class="fas fa-shield-alt mr-2"></i>Create Admin Account
+                    </button>
+
+                    <!-- Security Notice -->
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-red-600 mt-1 mr-3"></i>
+                            <div class="text-sm text-red-700">
+                                <p class="font-semibold mb-1">Important Security Notice</p>
+                                <p>Admin accounts have elevated privileges. Only register if you have been authorized by the system administrator. All admin activities are logged and monitored.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Login Links -->
+                    <div class="text-center space-y-2">
+                        <p class="text-sm text-gray-600">
+                            Already have an admin account? 
+                            <a href="/admin-login" class="text-red-600 hover:text-red-700 font-semibold transition-colors">
+                                Sign in here
+                            </a>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Regular user? 
+                            <a href="/register" class="text-red-600 hover:text-red-700 font-semibold transition-colors">
+                                Register as user
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Additional Security Info -->
+            <div class="text-center mt-6">
+                <div class="bg-white/20 backdrop-blur rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-center space-x-6 text-sm">
+                        <div class="flex items-center">
+                            <i class="fas fa-lock mr-2"></i>
+                            <span>256-bit Encryption</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-shield-alt mr-2"></i>
+                            <span>2FA Required</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-user-shield mr-2"></i>
+                            <span>Role-Based Access</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Password toggle functions
+function toggleAdminPassword() {
+    const passwordInput = document.getElementById('admin-password');
+    const passwordToggle = document.getElementById('admin-password-toggle');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+    }
+}
+
+function toggleAdminConfirmPassword() {
+    const passwordInput = document.getElementById('admin-confirm-password');
+    const passwordToggle = document.getElementById('admin-confirm-password-toggle');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+    }
+}
+
+// Password strength checker
+function checkAdminPasswordStrength(password) {
+    const strengthBar = document.getElementById('admin-password-strength');
+    let strength = 0;
+    
+    if (password.length >= 12) strength += 25; // Admin needs stronger password
+    if (password.match(/[a-z]/)) strength += 25;
+    if (password.match(/[A-Z]/)) strength += 25;
+    if (password.match(/[0-9]/)) strength += 12.5;
+    if (password.match(/[^a-zA-Z0-9]/)) strength += 12.5; // Special character
+    
+    strengthBar.style.width = strength + '%';
+    
+    if (strength <= 25) {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-red-500';
+    } else if (strength <= 50) {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-yellow-500';
+    } else if (strength <= 75) {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-blue-500';
+    } else {
+        strengthBar.className = 'h-2 rounded-full transition-all duration-300 bg-green-500';
+    }
+}
+
+// Password input listener
+document.getElementById('admin-password').addEventListener('input', function(e) {
+    checkAdminPasswordStrength(e.target.value);
+});
+
+// Admin registration form submission
+document.getElementById('admin-register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const adminCode = document.getElementById('admin-code').value;
+    const fullname = document.getElementById('admin-fullname').value;
+    const email = document.getElementById('admin-email').value;
+    const username = document.getElementById('admin-username').value;
+    const password = document.getElementById('admin-password').value;
+    const confirmPassword = document.getElementById('admin-confirm-password').value;
+    const role = document.getElementById('admin-role').value;
+    const securityQuestion = document.getElementById('security-question').value;
+    const securityAnswer = document.getElementById('security-answer').value;
+    const terms = document.getElementById('admin-terms').checked;
+    
+    // Validation
+    if (password !== confirmPassword) {
+        showNotification('Passwords do not match!', 'error');
+        return;
+    }
+    
+    if (!terms) {
+        showNotification('Please accept the admin terms of service', 'error');
+        return;
+    }
+    
+    // Validate admin code (demo: "ADMIN2024")
+    if (adminCode !== 'ADMIN2024') {
+        showNotification('Invalid admin registration code!', 'error');
+        return;
+    }
+    
+    // Check password strength for admin
+    if (password.length < 12 || !password.match(/[^a-zA-Z0-9]/)) {
+        showNotification('Admin password must be at least 12 characters with special characters!', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Admin Account...';
+    submitButton.disabled = true;
+    
+    // Simulate admin registration
+    setTimeout(() => {
+        // Store admin data (in production, this would be sent to backend)
+        const adminData = {
+            adminCode: adminCode,
+            fullname: fullname,
+            email: email,
+            username: username,
+            password: password, // In production, this would be hashed
+            role: role,
+            securityQuestion: securityQuestion,
+            securityAnswer: securityAnswer,
+            registeredAt: new Date().toISOString(),
+            permissions: getPermissionsForRole(role)
+        };
+        
+        // Store in localStorage (for demo purposes)
+        localStorage.setItem('adminData', JSON.stringify(adminData));
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('adminUsername', username);
+        localStorage.setItem('adminLoginTime', new Date().toISOString());
+        localStorage.setItem('adminSessionSecure', 'true');
+        
+        // Show success message
+        showNotification('Admin account created successfully! Redirecting...', 'success');
+        
+        // Redirect to admin dashboard
+        setTimeout(() => {
+            window.location.href = '/admin';
+        }, 2000);
+    }, 2500);
+});
+
+// Get permissions based on role
+function getPermissionsForRole(role) {
+    const permissions = {
+        'super-admin': ['all', 'user-management', 'system-settings', 'analytics', 'content-management'],
+        'admin': ['user-management', 'analytics', 'content-management'],
+        'moderator': ['content-management', 'moderation'],
+        'developer': ['system-settings', 'debug'],
+        'content-manager': ['content-management']
+    };
+    return permissions[role] || [];
+}
+
+// Check if already logged in
+document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
+        window.location.href = '/admin';
+    }
+});
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 transform translate-x-full transition-transform ${
+        type === 'success' ? 'bg-green-600' : 
+        type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+    }`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Pulse glow animation
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(239, 68, 68, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+.pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+</script>
+
+<style>
+/* Admin registration-specific styles */
+.min-h-screen {
+    min-height: 100vh;
+}
+
+/* Form enhancements */
+input:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Button animations */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2);
+}
+
+/* Loading state */
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Password strength bar */
+#admin-password-strength {
+    transition: all 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .max-w-md {
+        margin: 1rem;
+    }
+    
+    .bg-white {
+        padding: 2rem;
+    }
+}
+
+/* Pulse glow animation */
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(239, 68, 68, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+.pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+</style>
+{% endblock %}

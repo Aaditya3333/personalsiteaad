@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}About - Personal Website{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text">About Me</h1>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <img src="/static/images/1000011450.jpg" alt="Profile" class="rounded-lg shadow-lg">
+                </div>
+                <div>
+                    <h2 class="text-3xl font-semibold mb-4">Hello! I'm Valar Morghulas</h2>
+                    <p class="text-gray-600 mb-4">
+                        I'm a passionate full-stack developer with a love for creating beautiful, functional web applications. 
+                        With expertise in modern technologies and a keen eye for design, I bring ideas to life through code.
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        My journey in tech started 5 years ago, and since then I've worked on numerous projects ranging from 
+                        small business websites to complex enterprise applications.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm">JavaScript</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm">React</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm">FastAPI</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm">TailwindCSS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 reveal">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">50+</div>
+                    <p class="text-gray-600">Projects Completed</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">5+</div>
+                    <p class="text-gray-600">Years Experience</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">100%</div>
+                    <p class="text-gray-600">Client Satisfaction</p>
+                </div>
+            </div>
+
+            <!-- Experience Timeline -->
+            <div class="mt-20 reveal">
+                <h3 class="text-2xl font-semibold mb-8 text-center">Experience Timeline</h3>
+                <div class="max-w-4xl mx-auto">
+                    <div class="border-l-4 border-purple-600 pl-8 space-y-8">
+                        <div class="relative">
+                            <div class="absolute -left-10 w-6 h-6 bg-purple-600 rounded-full"></div>
+                            <h4 class="text-xl font-semibold">Senior Full Stack Developer</h4>
+                            <p class="text-purple-600 mb-2">Tech Innovations Inc. • 2022 - Present</p>
+                            <p class="text-gray-600">Leading development of scalable web applications and mentoring junior developers.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 w-6 h-6 bg-purple-600 rounded-full"></div>
+                            <h4 class="text-xl font-semibold">Full Stack Developer</h4>
+                            <p class="text-purple-600 mb-2">Digital Solutions Ltd. • 2020 - 2022</p>
+                            <p class="text-gray-600">Developed and maintained multiple client projects using modern technologies.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-10 w-6 h-6 bg-purple-600 rounded-full"></div>
+                            <h4 class="text-xl font-semibold">Junior Web Developer</h4>
+                            <p class="text-purple-600 mb-2">StartUp Hub • 2019 - 2020</p>
+                            <p class="text-gray-600">Started my journey building responsive websites and learning modern frameworks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Share Section -->
+            <div class="mt-16 text-center reveal">
+                <h3 class="text-2xl font-semibold mb-6">Connect With Me</h3>
+                <div class="flex justify-center space-x-4 mb-8">
+                    <a href="#" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-gray-800 text-white rounded-full flex items-center justify-center hover:bg-gray-900 transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+                
+                <!-- Share buttons -->
+                <div class="bg-gray-100 p-6 rounded-lg max-w-md mx-auto">
+                    <h4 class="font-semibold mb-4">Share this profile</h4>
+                    <div class="flex justify-center space-x-3">
+                        <button onclick="shareProfile('twitter')" class="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 transition-colors">
+                            <i class="fab fa-twitter mr-2"></i>Twitter
+                        </button>
+                        <button onclick="shareProfile('linkedin')" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                            <i class="fab fa-linkedin-in mr-2"></i>LinkedIn
+                        </button>
+                        <button onclick="copyProfileLink()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-link mr-2"></i>Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function shareProfile(platform) {
+    const url = window.location.href;
+    const text = "Check out my professional profile!";
+    
+    if (platform === 'twitter') {
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+    } else if (platform === 'linkedin') {
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+    }
+}
+
+function copyProfileLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        // Create a temporary notification
+        const notification = document.createElement('div');
+        notification.textContent = 'Link copied to clipboard!';
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    });
+}
+</script>
+{% endblock %}

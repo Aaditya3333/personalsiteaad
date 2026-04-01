@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Personal Website{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="min-h-screen flex items-center justify-center hero-gradient text-white fade-in">
+    <div class="container mx-auto px-6 text-center">
+        <h1 class="text-5xl md:text-7xl font-bold mb-6">
+            Hi, I'm <span class="text-yellow-300">Valar Morghulis</span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 text-gray-100">
+            <span id="typing-text" class="typing-effect"></span>
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/projects" class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors pulse">
+                View My Work
+            </a>
+            <a href="/contact" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all">
+                Get In Touch
+            </a>
+        </div>
+        <div class="mt-12 floating">
+            <i class="fas fa-chevron-down text-3xl animate-bounce"></i>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Info Section -->
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="text-center card-hover p-6 reveal">
+                <div class="text-4xl mb-4 text-purple-600">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Clean Code</h3>
+                <p class="text-gray-600">Writing maintainable and efficient code that follows best practices</p>
+            </div>
+            <div class="text-center card-hover p-6 reveal">
+                <div class="text-4xl mb-4 text-purple-600">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Responsive Design</h3>
+                <p class="text-gray-600">Creating beautiful interfaces that work on all devices</p>
+            </div>
+            <div class="text-center card-hover p-6 reveal">
+                <div class="text-4xl mb-4 text-purple-600">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Fast Performance</h3>
+                <p class="text-gray-600">Optimizing applications for speed and user experience</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">Technical Skills</h2>
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="reveal">
+                <div class="flex justify-between mb-2">
+                    <span class="font-semibold">Python / FastAPI</span>
+                    <span class="text-purple-600">95%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-4">
+                    <div class="progress-bar" data-width="95%"></div>
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="flex justify-between mb-2">
+                    <span class="font-semibold">JavaScript / React</span>
+                    <span class="text-purple-600">90%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-4">
+                    <div class="progress-bar" data-width="90%"></div>
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="flex justify-between mb-2">
+                    <span class="font-semibold">HTML / CSS / Tailwind</span>
+                    <span class="text-purple-600">95%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-4">
+                    <div class="progress-bar" data-width="95%"></div>
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="flex justify-between mb-2">
+                    <span class="font-semibold">Database Design</span>
+                    <span class="text-purple-600">85%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-4">
+                    <div class="progress-bar" data-width="85%"></div>
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="flex justify-between mb-2">
+                    <span class="font-semibold">UI/UX Design</span>
+                    <span class="text-purple-600">80%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-4">
+                    <div class="progress-bar" data-width="80%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">Client Testimonials</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-gray-50 p-6 rounded-lg card-hover reveal">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                </div>
+                <p class="text-gray-600 mb-4 italic">"Outstanding work! The website exceeded our expectations and was delivered on time. Highly professional and skilled developer."</p>
+                <div class="flex items-center">
+                    <img src="/static/images/1000011450.jpg" alt="Sarah Johnson" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold">Sarah Johnson</h4>
+                        <p class="text-sm text-gray-500">CEO, TechStart</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-lg card-hover reveal">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                </div>
+                <p class="text-gray-600 mb-4 italic">"Amazing attention to detail and creativity. The user interface is intuitive and performance is excellent."</p>
+                <div class="flex items-center">
+                    <img src="/static/images/2.webp" alt="Michael Chen" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold">Michael Chen</h4>
+                        <p class="text-sm text-gray-500">Product Manager, InnovateCo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-6 rounded-lg card-hover reveal">
+                <div class="flex mb-4">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                </div>
+                <p class="text-gray-600 mb-4 italic">"Great communication throughout the project and delivered exactly what we needed. Would definitely work with again!"</p>
+                <div class="flex items-center">
+                    <img src="/static/images/3.jpg" alt="Emily Davis" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold">Emily Davis</h4>
+                        <p class="text-sm text-gray-500">Marketing Director, GrowthHub</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 hero-gradient text-white">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 reveal">Ready to Start Your Project?</h2>
+        <p class="text-xl mb-8 reveal">Let's work together to bring your ideas to life</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
+            <a href="/contact" class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                Start a Project
+            </a>
+            <a href="/static/resume.pdf" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-all" download>
+                <i class="fas fa-download mr-2"></i>Download Resume
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+<script>
+// Typing effect
+const phrases = [
+    "Full Stack Developer",
+    "UI/UX Designer", 
+    "Problem Solver",
+    "Python Expert",
+    "Creative Thinker"
+];
+
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+const typingElement = document.getElementById('typing-text');
+
+function typeEffect() {
+    const currentPhrase = phrases[phraseIndex];
+    
+    if (isDeleting) {
+        typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+    } else {
+        typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+    }
+    
+    if (!isDeleting && charIndex === currentPhrase.length) {
+        isDeleting = true;
+        setTimeout(typeEffect, 2000);
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(typeEffect, 500);
+    } else {
+        setTimeout(typeEffect, isDeleting ? 50 : 100);
+    }
+}
+
+// Start typing effect when page loads
+window.addEventListener('load', () => {
+    setTimeout(typeEffect, 1000);
+});
+</script>

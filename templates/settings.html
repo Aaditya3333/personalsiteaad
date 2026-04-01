@@ -1,0 +1,613 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Tony Stark{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">Settings</h1>
+        
+        <div class="max-w-4xl mx-auto">
+            <!-- Settings Navigation -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8 reveal">
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <button class="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold transition-all hover:bg-purple-700 hover:scale-105" onclick="showSection('appearance')">
+                        <i class="fas fa-palette mr-2"></i>Appearance
+                    </button>
+                    <button class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-all hover:bg-gray-300 hover:scale-105" onclick="showSection('account')">
+                        <i class="fas fa-user mr-2"></i>Account
+                    </button>
+                    <button class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-all hover:bg-gray-300 hover:scale-105" onclick="showSection('privacy')">
+                        <i class="fas fa-shield-alt mr-2"></i>Privacy
+                    </button>
+                    <button class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-all hover:bg-gray-300 hover:scale-105" onclick="showSection('notifications')">
+                        <i class="fas fa-bell mr-2"></i>Notifications
+                    </button>
+                    <button class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-all hover:bg-gray-300 hover:scale-105" onclick="showSection('advanced')">
+                        <i class="fas fa-cog mr-2"></i>Advanced
+                    </button>
+                </div>
+            </div>
+
+            <!-- Appearance Settings -->
+            <div id="appearance-section" class="settings-section bg-white rounded-lg shadow-lg p-6 mb-8 reveal">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-palette text-purple-600 mr-3"></i>
+                    Appearance Settings
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Theme Selection -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Theme</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="theme" value="light" class="mr-3">
+                                <span class="flex items-center">
+                                    <i class="fas fa-sun text-yellow-500 mr-2"></i>
+                                    Light Mode
+                                </span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="theme" value="dark" class="mr-3">
+                                <span class="flex items-center">
+                                    <i class="fas fa-moon text-blue-600 mr-2"></i>
+                                    Dark Mode
+                                </span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="theme" value="auto" class="mr-3">
+                                <span class="flex items-center">
+                                    <i class="fas fa-adjust text-purple-600 mr-2"></i>
+                                    Auto (System)
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Color Scheme -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Color Scheme</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span>Primary Color</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 bg-purple-600 rounded-full cursor-pointer" onclick="changeColor('#667eea')"></div>
+                                    <div class="w-8 h-8 bg-blue-600 rounded-full cursor-pointer" onclick="changeColor('#3b82f6')"></div>
+                                    <div class="w-8 h-8 bg-green-600 rounded-full cursor-pointer" onclick="changeColor('#10b981')"></div>
+                                    <div class="w-8 h-8 bg-red-600 rounded-full cursor-pointer" onclick="changeColor('#ef4444')"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>Font Size</span>
+                                <select class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-600">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                    <option value="xlarge">Extra Large</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layout Options -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold mb-4">Layout</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" class="w-4 h-4 text-purple-600">
+                            <span>Compact View</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" class="w-4 h-4 text-purple-600">
+                            <span>Show Sidebar</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" class="w-4 h-4 text-purple-600">
+                            <span>Animations</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Settings -->
+            <div id="account-section" class="settings-section hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-user text-purple-600 mr-3"></i>
+                    Account Settings
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Profile Information</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
+                                <input type="text" value="Tony Stark" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" value="tony@tonystark.com" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                                <textarea class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600" rows="3">Full-stack developer passionate about creating amazing web experiences.</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                                <input type="text" value="San Francisco, CA" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Social Links</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">GitHub</label>
+                                <input type="url" value="github.com/tonystark" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">LinkedIn</label>
+                                <input type="url" value="linkedin.com/in/tonystark" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Twitter</label>
+                                <input type="url" value="@tonystark_dev" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Portfolio</label>
+                                <input type="url" value="tonystark.dev" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-600">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div id="privacy-section" class="settings-section hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-shield-alt text-purple-600 mr-3"></i>
+                    Privacy Settings
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Data & Privacy</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-chart-line text-blue-600 mr-3"></i>
+                                    Analytics Tracking
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Help improve the site</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-cookie text-green-600 mr-3"></i>
+                                    Cookie Preferences
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Essential only</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-user-secret text-purple-600 mr-3"></i>
+                                    Profile Visibility
+                                </span>
+                                <div class="relative">
+                                    <select class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-600">
+                                        <option value="public">Public</option>
+                                        <option value="friends">Friends Only</option>
+                                        <option value="private">Private</option>
+                                    </select>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Security</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-lock text-red-600 mr-3"></i>
+                                    Two-Factor Authentication
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Enabled</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-bell text-orange-600 mr-3"></i>
+                                    Login Notifications
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Email alerts</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div id="notifications-section" class="settings-section hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-bell text-purple-600 mr-3"></i>
+                    Notification Preferences
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Email Notifications</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-envelope text-blue-600 mr-3"></i>
+                                    Newsletter Updates
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Weekly digest</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-comment text-green-600 mr-3"></i>
+                                    Blog Comments
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Real-time</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-project-diagram text-purple-600 mr-3"></i>
+                                    Project Updates
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">New launches</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Push Notifications</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-desktop text-orange-600 mr-3"></i>
+                                    Browser Notifications
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Enabled</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                                <span class="flex items-center">
+                                    <i class="fas fa-mobile text-blue-600 mr-3"></i>
+                                    Mobile Push
+                                </span>
+                                <div class="relative">
+                                    <input type="checkbox" class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Not connected</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div id="advanced-section" class="settings-section hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-cog text-purple-600 mr-3"></i>
+                    Advanced Settings
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Performance</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span>Lazy Loading</span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Improve page speed</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>Image Optimization</span>
+                                <div class="relative">
+                                    <input type="checkbox" checked class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Auto-compress</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>Cache Strategy</span>
+                                <select class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-600">
+                                    <option value="aggressive">Aggressive</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="minimal">Minimal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Developer Options</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span>Debug Mode</span>
+                                <div class="relative">
+                                    <input type="checkbox" class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Show console logs</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>API Access</span>
+                                <div class="relative">
+                                    <input type="checkbox" class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Enable API key</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>Experimental Features</span>
+                                <div class="relative">
+                                    <input type="checkbox" class="w-4 h-4 text-purple-600">
+                                    <span class="ml-2 text-sm text-gray-600">Beta testing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Data Management</h3>
+                        <div class="space-y-4">
+                            <button class="w-full text-left px-4 py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors flex items-center">
+                                <i class="fas fa-trash mr-3"></i>
+                                <span>Clear All Data</span>
+                            </button>
+                            <button class="w-full text-left px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors flex items-center">
+                                <i class="fas fa-download mr-3"></i>
+                                <span>Export All Data</span>
+                            </button>
+                            <button class="w-full text-left px-4 py-3 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg transition-colors flex items-center">
+                                <i class="fas fa-sync mr-3"></i>
+                                <span>Reset to Defaults</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Settings -->
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-6 text-white reveal">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Save Changes</h3>
+                        <p class="text-purple-100">Your preferences will be applied immediately</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-save mr-2"></i>Save Settings
+                        </button>
+                        <button class="bg-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors">
+                            <i class="fas fa-undo mr-2"></i>Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Settings navigation
+function showSection(sectionName) {
+    // Hide all sections
+    document.querySelectorAll('.settings-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+    
+    // Show selected section
+    const targetSection = document.getElementById(sectionName + '-section');
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+        targetSection.classList.add('reveal');
+        setTimeout(() => {
+            targetSection.classList.add('active');
+        }, 100);
+    }
+    
+    // Update button states
+    document.querySelectorAll('.flex.flex-wrap button').forEach(button => {
+        button.classList.remove('bg-purple-600', 'text-white');
+        button.classList.add('bg-gray-200', 'text-gray-700');
+    });
+    
+    // Highlight active button
+    event.target.classList.remove('bg-gray-200', 'text-gray-700');
+    event.target.classList.add('bg-purple-600', 'text-white');
+}
+
+// Theme switching
+function changeColor(color) {
+    document.documentElement.style.setProperty('--primary-color', color);
+    localStorage.setItem('primaryColor', color);
+    
+    // Show success notification
+    showNotification('Color theme updated successfully!', 'success');
+}
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 transform translate-x-full transition-transform ${
+        type === 'success' ? 'bg-green-600' : 
+        type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+    }`;
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Initialize settings
+document.addEventListener('DOMContentLoaded', function() {
+    // Load saved preferences
+    const savedColor = localStorage.getItem('primaryColor');
+    if (savedColor) {
+        document.documentElement.style.setProperty('--primary-color', savedColor);
+    }
+    
+    // Add reveal animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    });
+    
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
+
+<style>
+/* Settings-specific styles */
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Custom color variable */
+:root {
+    --primary-color: #667eea;
+}
+
+/* Enhanced form elements */
+input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+input[type="radio"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Enhanced buttons */
+button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+/* Notification styles */
+.notification-enter {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.notification-exit {
+    animation: slideOutRight 0.3s ease-in;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Settings navigation */
+.flex.flex-wrap button {
+    transition: all 0.3s ease;
+}
+
+.flex.flex-wrap button:hover {
+    transform: translateY(-2px);
+}
+
+/* Form enhancements */
+label {
+    transition: background-color 0.2s ease;
+}
+
+label:hover {
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* Responsive settings */
+@media (max-width: 768px) {
+    .grid.md\\:grid-cols-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .grid.md\\:grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Personal Website{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dark {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        .dark .bg-white {
+            background-color: #2d2d2d !important;
+        }
+        .dark .bg-gray-50 {
+            background-color: #1a1a1a !important;
+        }
+        .dark .text-gray-700 {
+            color: #e5e5e5 !important;
+        }
+        .dark .text-gray-600 {
+            color: #b3b3b3 !important;
+        }
+        .dark .border-gray-300 {
+            border-color: #4d4d4d !important;
+        }
+        .dark .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+        }
+        .dark .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark nav {
+            background-color: rgba(26, 26, 26, 0.95) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark .nav-glass {
+            background-color: rgba(26, 26, 26, 0.95) !important;
+        }
+        .dark .text-purple-600 {
+            color: #a78bfa !important;
+        }
+        .dark .hover\:text-purple-600:hover {
+            color: #c4b5fd !important;
+        }
+        .dark .bg-gray-200 {
+            background-color: #374151 !important;
+        }
+        .dark .hover\:bg-gray-300:hover {
+            background-color: #4b5563 !important;
+        }
+        .dark .text-gray-500 {
+            color: #9ca3af !important;
+        }
+        .dark .border-t {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        .dark .text-yellow-300 {
+            color: #fbbf24 !important;
+        }
+        .dark .text-yellow-400 {
+            color: #fbbf24 !important;
+        }
+        .dark .bg-gray-100 {
+            background-color: #374151 !important;
+        }
+        .dark .hover\:bg-gray-100:hover {
+            background-color: #4b5563 !important;
+        }
+        .dark input {
+            background-color: #374151 !important;
+            color: #e5e5e5 !important;
+            border-color: #4b5563 !important;
+        }
+        .dark input:focus {
+            border-color: #a78bfa !important;
+        }
+        .dark .backdrop-blur-md {
+            backdrop-filter: blur(12px) !important;
+        }
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-link.active {
+            color: #7c3aed !important;
+            font-weight: 600;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 1px;
+        }
+        .nav-link-mobile {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-link-mobile.active {
+            color: #7c3aed !important;
+            font-weight: 600;
+        }
+        .nav-link-mobile.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 1px;
+        }
+        .dark .nav-link.active {
+            color: #a78bfa !important;
+        }
+        .dark .nav-link-mobile.active {
+            color: #a78bfa !important;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 1.5s ease;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .typing-effect {
+            border-right: 3px solid #667eea;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { border-color: #667eea; }
+            51%, 100% { border-color: transparent; }
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm">This website uses cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <button id="accept-cookies" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        Accept All
+                    </button>
+                    <button id="reject-cookies" class="border border-white text-white px-6 py-2 rounded-lg font-medium hover:bg-white hover:text-gray-900 transition-colors">
+                        Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold gradient-text">Tony Stark</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Home</a>
+                    <a href="/about" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">About</a>
+                    <a href="/projects" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Projects</a>
+                    <a href="/blog" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Blog</a>
+                    <div id="user-nav" class="hidden">
+                        <a href="/dashboard" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Dashboard</a>
+                        <a href="/settings" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Settings</a>
+                    </div>
+                    <div id="admin-nav" class="hidden">
+                        <a href="/analytics" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Analytics</a>
+                        <a href="/admin" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Admin</a>
+                        <a href="/admin/contacts" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Contacts</a>
+                    </div>
+                    <a href="/chatbot" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">AI Assistant</a>
+                    <a href="/contact" class="nav-link text-gray-700 hover:text-purple-600 transition-colors font-medium">Contact</a>
+                    <button id="dark-mode-toggle" class="p-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">
+                        <i class="fas fa-moon text-gray-700"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="language-toggle" class="p-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors flex items-center">
+                            <i class="fas fa-globe mr-2"></i>
+                            <span id="current-language">EN</span>
+                        </button>
+                        <div id="language-dropdown" class="hidden absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg py-2 z-50">
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition-colors" data-lang="en">English</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition-colors" data-lang="es">Español</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition-colors" data-lang="fr">Français</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 transition-colors" data-lang="de">Deutsch</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Visitor Counter -->
+                    <div class="hidden lg:flex items-center bg-gray-100 px-3 py-2 rounded-lg">
+                        <i class="fas fa-eye text-purple-600 mr-2"></i>
+                        <div class="text-sm">
+                            <div class="font-semibold">Visitors:</div>
+                            <div id="visitor-count" class="text-purple-600">{{ visitor_count | default(0) }}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Login/Logout Buttons -->
+                    <div id="auth-buttons" class="flex items-center space-x-2">
+                        <button id="user-login-btn" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login
+                        </button>
+                        <button id="user-register-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-user-plus mr-2"></i>Register
+                        </button>
+                        <button id="admin-login-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-shield-alt mr-2"></i>Admin
+                        </button>
+                        <div id="user-info" class="hidden items-center space-x-3">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                    <span id="user-initial">U</span>
+                                </div>
+                                <span id="user-email" class="text-sm text-gray-700"></span>
+                            </div>
+                            <button id="logout-btn" class="px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button id="search-toggle" class="p-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">
+                        <i class="fas fa-search text-gray-700"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-6 py-4 space-y-3">
+                <a href="/" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Home</a>
+                <a href="/about" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">About</a>
+                <a href="/projects" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Projects</a>
+                <a href="/blog" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Blog</a>
+                <a href="/dashboard" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Dashboard</a>
+                <a href="/chatbot" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">AI Assistant</a>
+                <a href="/analytics" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Analytics</a>
+                <a href="/settings" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Settings</a>
+                <a href="/contact" class="nav-link-mobile block text-gray-700 hover:text-purple-600 transition-colors font-medium">Contact</a>
+                <button id="mobile-dark-mode-toggle" class="p-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-moon text-gray-700"></i> Dark Mode
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search Modal -->
+        <div id="search-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
+            <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Search</h3>
+                    <button id="close-search" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <input type="text" id="search-input" placeholder="Search for projects, articles..." 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                <div id="search-results" class="mt-4"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; 2026 Tony Stark. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-purple-400 transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-400 transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-purple-400 transition-colors">
+                        <i class="fas fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 500);
+        });
+
+        // Set active navigation based on current page
+        function setActiveNavigation() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link, .nav-link-mobile');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPath || 
+                    (currentPath === '/' && link.getAttribute('href') === '/')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Call on page load
+        setActiveNavigation();
+
+        // Cookie consent functionality
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptCookies = document.getElementById('accept-cookies');
+        const rejectCookies = document.getElementById('reject-cookies');
+
+        function hideCookieBanner() {
+            cookieBanner.classList.add('hidden');
+            localStorage.setItem('cookieConsent', 'true');
+        }
+
+        if (!localStorage.getItem('cookieConsent')) {
+            cookieBanner.classList.remove('hidden');
+        }
+
+        acceptCookies.addEventListener('click', hideCookieBanner);
+        rejectCookies.addEventListener('click', hideCookieBanner);
+
+        // Language switcher functionality
+        const languageToggle = document.getElementById('language-toggle');
+        const languageDropdown = document.getElementById('language-dropdown');
+        const currentLanguageSpan = document.getElementById('current-language');
+
+        languageToggle.addEventListener('click', function() {
+            languageDropdown.classList.toggle('hidden');
+        });
+
+        // Handle language selection
+        document.querySelectorAll('[data-lang]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                currentLanguageSpan.textContent = lang.toUpperCase();
+                languageDropdown.classList.add('hidden');
+                localStorage.setItem('selectedLanguage', lang);
+                
+                // Here you would typically reload the page with the new language
+                console.log('Language changed to:', lang);
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!languageToggle.contains(e.target)) {
+                languageDropdown.classList.add('hidden');
+            }
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
+        const body = document.body;
+        
+        function toggleDarkMode() {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            
+            // Update icons
+            const icon = darkModeToggle.querySelector('i');
+            const mobileIcon = mobileDarkModeToggle.querySelector('i');
+            
+            if (isDark) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                mobileIcon.classList.remove('fa-moon');
+                mobileIcon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                mobileIcon.classList.remove('fa-sun');
+                mobileIcon.classList.add('fa-moon');
+            }
+        }
+        
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
+
+        // Authentication System
+        function checkAuthStatus() {
+            const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+            
+            const userLoginBtn = document.getElementById('user-login-btn');
+            const userRegisterBtn = document.getElementById('user-register-btn');
+            const adminLoginBtn = document.getElementById('admin-login-btn');
+            const userInfo = document.getElementById('user-info');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userNav = document.getElementById('user-nav');
+            const adminNav = document.getElementById('admin-nav');
+            
+            if (userLoggedIn || adminLoggedIn) {
+                // Hide login and register buttons
+                userLoginBtn.classList.add('hidden');
+                userRegisterBtn.classList.add('hidden');
+                adminLoginBtn.classList.add('hidden');
+                
+                // Show user info
+                userInfo.classList.remove('hidden');
+                userInfo.classList.add('flex');
+                
+                // Update user info
+                const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('adminUsername') || 'User';
+                const userInitial = userEmail.charAt(0).toUpperCase();
+                
+                document.getElementById('user-email').textContent = userEmail;
+                document.getElementById('user-initial').textContent = userInitial;
+                
+                // Show appropriate navigation
+                if (userLoggedIn) {
+                    userNav.classList.remove('hidden');
+                }
+                if (adminLoggedIn) {
+                    adminNav.classList.remove('hidden');
+                }
+            } else {
+                // Show login and register buttons
+                userLoginBtn.classList.remove('hidden');
+                userRegisterBtn.classList.remove('hidden');
+                adminLoginBtn.classList.remove('hidden');
+                
+                // Hide user info
+                userInfo.classList.add('hidden');
+                userInfo.classList.remove('flex');
+                
+                // Hide navigation
+                userNav.classList.add('hidden');
+                adminNav.classList.add('hidden');
+            }
+        }
+
+        // Login button handlers
+        // Ensure buttons exist before adding event listeners
+        if (document.getElementById('user-login-btn')) {
+            document.getElementById('user-login-btn').addEventListener('click', function() {
+                window.location.href = '/login';
+            });
+        }
+
+        if (document.getElementById('user-register-btn')) {
+            document.getElementById('user-register-btn').addEventListener('click', function() {
+                window.location.href = '/register';
+            });
+        }
+
+        if (document.getElementById('admin-login-btn')) {
+            document.getElementById('admin-login-btn').addEventListener('click', function() {
+                window.location.href = '/admin-login';
+            });
+        }
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            // Clear all auth data
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('loginTime');
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminUsername');
+            localStorage.removeItem('adminLoginTime');
+            localStorage.removeItem('adminSessionSecure');
+            
+            // Show notification
+            showNotification('Logged out successfully', 'success');
+            
+            // Update UI
+            checkAuthStatus();
+            
+            // Redirect to home
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 p-4 rounded-lg text-white z-50 transform translate-x-full transition-transform ${
+                type === 'success' ? 'bg-green-600' : 
+                type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Check auth status on page load
+        checkAuthStatus();
+
+        // Only redirect if not on auth pages and not on main pages
+        const currentPath = window.location.pathname;
+        const authPages = ['/login', '/admin-login', '/register', '/admin-register'];
+        const mainPages = ['/', '/about', '/projects', '/blog', '/contact', '/chatbot'];
+        const isAuthPage = authPages.some(page => currentPath.includes(page));
+        const isMainPage = mainPages.some(page => currentPath === page || currentPath === page + '/');
+        
+        if (!isAuthPage && !isMainPage) {
+            // Only redirect if on protected pages and not logged in
+            const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+            
+            // Check specific page permissions
+            if (currentPath === '/dashboard' && !userLoggedIn && !adminLoggedIn) {
+                window.location.href = '/login';
+            } else if (currentPath === '/admin' && !adminLoggedIn) {
+                window.location.href = '/admin-login';
+            } else if (currentPath === '/settings' && !userLoggedIn && !adminLoggedIn) {
+                window.location.href = '/login';
+            } else if (currentPath === '/analytics' && !adminLoggedIn) {
+                window.location.href = '/admin-login';
+            }
+        }
+
+        // Check session timeout
+        function checkSessionTimeout() {
+            const userLoginTime = localStorage.getItem('loginTime');
+            const adminLoginTime = localStorage.getItem('adminLoginTime');
+            
+            if (userLoginTime) {
+                const loginTime = new Date(userLoginTime);
+                const now = new Date();
+                const diffHours = (now - loginTime) / (1000 * 60 * 60);
+                
+                // Auto logout after 24 hours
+                if (diffHours > 24) {
+                    localStorage.removeItem('userLoggedIn');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('loginTime');
+                    showNotification('Session expired. Please login again.', 'info');
+                    checkAuthStatus();
+                }
+            }
+            
+            if (adminLoginTime) {
+                const loginTime = new Date(adminLoginTime);
+                const now = new Date();
+                const diffHours = (now - loginTime) / (1000 * 60 * 60);
+                
+                // Auto logout admin after 8 hours
+                if (diffHours > 8) {
+                    localStorage.removeItem('adminLoggedIn');
+                    localStorage.removeItem('adminUsername');
+                    localStorage.removeItem('adminLoginTime');
+                    localStorage.removeItem('adminSessionSecure');
+                    showNotification('Admin session expired. Please login again.', 'info');
+                    checkAuthStatus();
+                }
+            }
+        }
+
+        // Check session every 5 minutes
+        setInterval(checkSessionTimeout, 300000);
+        
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            body.classList.add('dark');
+            document.querySelectorAll('#dark-mode-toggle i, #mobile-dark-mode-toggle i').forEach(icon => {
+                icon.className = 'fas fa-sun text-yellow-400';
+            });
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Search functionality
+        const searchToggle = document.getElementById('search-toggle');
+        const searchModal = document.getElementById('search-modal');
+        const closeSearch = document.getElementById('close-search');
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        
+        searchToggle.addEventListener('click', () => {
+            searchModal.classList.remove('hidden');
+            searchInput.focus();
+        });
+        
+        closeSearch.addEventListener('click', () => {
+            searchModal.classList.add('hidden');
+            searchInput.value = '';
+            searchResults.innerHTML = '';
+        });
+        
+        searchModal.addEventListener('click', (e) => {
+            if (e.target === searchModal) {
+                searchModal.classList.add('hidden');
+            }
+        });
+        
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query.length > 2) {
+                // Simulate search results
+                searchResults.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer">
+                            <h4 class="font-semibold">E-Commerce Platform</h4>
+                            <p class="text-sm text-gray-600">Full-stack e-commerce solution...</p>
+                        </div>
+                        <div class="p-3 hover:bg-gray-100 rounded cursor-pointer">
+                            <h4 class="font-semibold">Task Management App</h4>
+                            <p class="text-sm text-gray-600">Collaborative task management tool...</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                searchResults.innerHTML = '';
+            }
+        });
+
+        // Back to top button
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Reveal animations on scroll
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Progress bar animation
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 200);
+            });
+        }
+        
+        // Call when skills section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateProgressBars();
+                }
+            });
+        });
+        
+        const skillsSection = document.querySelector('#skills');
+        if (skillsSection) {
+            observer.observe(skillsSection);
+        }
+    </script>
+</body>
+</html>

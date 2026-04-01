@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center bg-gray-50">
+    <div class="container mx-auto px-6 text-center">
+        <div class="max-w-2xl">
+            <!-- 404 Animation -->
+            <div class="mb-8 reveal">
+                <div class="text-9xl font-bold text-gray-300 mb-4 floating">404</div>
+                <h1 class="text-4xl md:text-6xl font-bold gradient-text mb-4">Oops! Page Not Found</h1>
+            </div>
+            
+            <!-- Error Message -->
+            <div class="bg-white p-8 rounded-lg shadow-lg mb-8 reveal">
+                <div class="text-6xl mb-4">🔍</div>
+                <h2 class="text-2xl font-semibold mb-4">The page you're looking for doesn't exist</h2>
+                <p class="text-gray-600 mb-6">Don't worry, even the best explorers get lost sometimes!</p>
+                
+                <!-- Search Box -->
+                <div class="max-w-md mx-auto mb-6">
+                    <div class="relative">
+                        <input type="text" id="search-404" placeholder="Search for something else..." 
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent">
+                        <button onclick="performSearch()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors text-center">
+                        <i class="fas fa-home mr-2"></i>Go Home
+                    </a>
+                    <a href="/projects" class="border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-6 py-3 rounded-lg font-semibold transition-colors text-center">
+                        <i class="fas fa-folder-open mr-2"></i>View Projects
+                    </a>
+                    <a href="/contact" class="border border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white px-6 py-3 rounded-lg font-semibold transition-colors text-center">
+                        <i class="fas fa-envelope mr-2"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Popular Links -->
+            <div class="bg-gray-100 p-6 rounded-lg reveal">
+                <h3 class="text-lg font-semibold mb-4">Maybe you're looking for:</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="/projects" class="flex items-center p-3 bg-white rounded-lg hover:shadow-md transition-all">
+                        <i class="fas fa-laptop-code text-purple-600 mr-3"></i>
+                        <div>
+                            <div class="font-semibold">Projects</div>
+                            <div class="text-sm text-gray-600">View my portfolio</div>
+                        </div>
+                    </a>
+                    <a href="/blog" class="flex items-center p-3 bg-white rounded-lg hover:shadow-md transition-all">
+                        <i class="fas fa-blog text-purple-600 mr-3"></i>
+                        <div>
+                            <div class="font-semibold">Blog</div>
+                            <div class="text-sm text-gray-600">Read latest articles</div>
+                        </div>
+                    </a>
+                    <a href="/about" class="flex items-center p-3 bg-white rounded-lg hover:shadow-md transition-all">
+                        <i class="fas fa-user text-purple-600 mr-3"></i>
+                        <div>
+                            <div class="font-semibold">About</div>
+                            <div class="text-sm text-gray-600">Learn about me</div>
+                        </div>
+                    </a>
+                    <a href="/contact" class="flex items-center p-3 bg-white rounded-lg hover:shadow-md transition-all">
+                        <i class="fas fa-envelope text-purple-600 mr-3"></i>
+                        <div>
+                            <div class="font-semibold">Contact</div>
+                            <div class="text-sm text-gray-600">Get in touch</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Fun Animation -->
+            <div class="mt-8 text-center">
+                <div class="inline-block">
+                    <div class="text-6xl floating">🚀</div>
+                    <p class="text-gray-600 mt-2">Let's get you back on track!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function performSearch() {
+    const searchTerm = document.getElementById('search-404').value;
+    if (searchTerm.trim()) {
+        // Redirect to search results page
+        window.location.href = `/blog?search=${encodeURIComponent(searchTerm)}`;
+    }
+}
+
+// Add enter key support for search
+document.getElementById('search-404').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        performSearch();
+    }
+});
+</script>
+{% endblock %}
