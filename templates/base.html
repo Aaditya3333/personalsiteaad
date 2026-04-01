@@ -151,6 +151,35 @@
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             border-radius: 1px;
         }
+
+        /* Force visible navbar action colors */
+        #auth-buttons button,
+        #user-info,
+        #user-nav a,
+        #admin-nav a {
+            color: #111827 !important;
+        }
+
+        #auth-buttons button {
+            border: 1px solid rgba(31, 41, 55, 0.2);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #auth-buttons button:hover {
+            opacity: 0.95;
+        }
+
+        #user-info {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.35rem 0.65rem;
+        }
+
+        /* Ensure admin links are distinct */
+        #admin-nav a {
+            color: #1f2937 !important;
+        }
         .dark .nav-link.active {
             color: #a78bfa !important;
         }
