@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="templates", auto_reload=False, cache_size=0)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -218,7 +218,7 @@ async def home(request: Request):
         return templates.TemplateResponse("index.html", {"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.error(f"Home page error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        return HTMLResponse("<h1>Home page temporarily unavailable</h1>", status_code=500)
 
 @app.get("/about")
 async def about(request: Request):
@@ -227,7 +227,7 @@ async def about(request: Request):
         return templates.TemplateResponse("about.html", {"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.error(f"About page error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        return HTMLResponse("<h1>About page temporarily unavailable</h1>", status_code=500)
 
 @app.get("/projects")
 async def projects(request: Request, tag: str = None):
@@ -236,12 +236,16 @@ async def projects(request: Request, tag: str = None):
         return templates.TemplateResponse("projects.html", {"request": request, "projects": [], "visitor_count": visitor_count, "selected_tag": tag})
     except Exception as e:
         logger.error(f"Projects page error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        return HTMLResponse("<h1>Projects page temporarily unavailable</h1>", status_code=500)
 
 # 404 Error Handler
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
-    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    try:
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    except Exception as e:
+        logger.error(f"404 template error: {str(e)}")
+        return HTMLResponse("<h1>404 - Page Not Found</h1>", status_code=404)
 
 if __name__ == "__main__":
     import uvicorn
