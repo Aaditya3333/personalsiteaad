@@ -3,47 +3,7 @@
 {% block title %}Admin Dashboard - Tony Stark{% endblock %}
 
 {% block content %}
-<!-- Admin Authentication Check -->
-<script>
-// Check admin authentication before showing content
-document.addEventListener('DOMContentLoaded', function() {
-    const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-    const adminSessionSecure = localStorage.getItem('adminSessionSecure') === 'true';
-    
-    if (!adminLoggedIn || !adminSessionSecure) {
-        // Not logged in as admin - redirect to admin login
-        showNotification('Admin access required. Redirecting to login...', 'error');
-        setTimeout(() => {
-            window.location.href = '/admin-login';
-        }, 2000);
-        return;
-    }
-    
-    // Verify session is still valid
-    const adminLoginTime = localStorage.getItem('adminLoginTime');
-    if (adminLoginTime) {
-        const loginTime = new Date(adminLoginTime);
-        const now = new Date();
-        const diffHours = (now - loginTime) / (1000 * 60 * 60);
-        
-        // Auto logout after 8 hours
-        if (diffHours > 8) {
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminUsername');
-            localStorage.removeItem('adminLoginTime');
-            localStorage.removeItem('adminSessionSecure');
-            showNotification('Admin session expired. Please login again.', 'error');
-            setTimeout(() => {
-                window.location.href = '/admin-login';
-            }, 2000);
-            return;
-        }
-    }
-    
-    console.log('Admin access granted for user:', localStorage.getItem('adminUsername'));
-});
-
-// Notification function for admin page
+<!-- Admin Dashboard Content -->
 function showNotification(message, type) {
     type = type || 'info';
     const notification = document.createElement('div');
@@ -96,7 +56,7 @@ function showNotification(message, type) {
                         </div>
                         <div>
                             <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
-                            <p class="text-gray-600">Welcome back, Tony Stark</p>
+                            <p class="text-gray-600">Welcome back, {{ admin.fullname }}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">

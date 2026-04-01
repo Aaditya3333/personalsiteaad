@@ -526,9 +526,36 @@ async def register_user(request: Request):
     form = await request.form()
     email = form.get('email')
     password = form.get('password')
+    confirm_password = form.get('confirm-password')
     fullname = form.get('fullname')
     username = form.get('username')
+    terms = form.get('terms') == 'on'
     newsletter = form.get('newsletter') == 'on'
+    
+    # Validation
+    if not all([email, password, fullname, username]):
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "All fields are required"
+        })
+    
+    if password != confirm_password:
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Passwords do not match"
+        })
+    
+    if not terms:
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "You must accept the terms and conditions"
+        })
+    
+    if len(password) < 6:
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Password must be at least 6 characters long"
+        })
     
     try:
         conn = sqlite3.connect('users.db')
@@ -541,6 +568,15 @@ async def register_user(request: Request):
             return templates.TemplateResponse("register.html", {
                 "request": request,
                 "error": "Email already registered"
+            })
+        
+        # Check if username already exists
+        cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
+        if cursor.fetchone():
+            conn.close()
+            return templates.TemplateResponse("register.html", {
+                "request": request,
+                "error": "Username already taken"
             })
         
         # Insert new user

@@ -3,51 +3,7 @@
 {% block title %}User Dashboard - Tony Stark{% endblock %}
 
 {% block content %}
-<!-- User Authentication Check -->
-<script>
-// Check user authentication before showing content
-document.addEventListener('DOMContentLoaded', function() {
-    const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-    const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-    
-    if (!userLoggedIn && !adminLoggedIn) {
-        // Not logged in - redirect to login
-        showNotification('Login required. Redirecting to login...', 'error');
-        setTimeout(() => {
-            window.location.href = '/login';
-        }, 2000);
-        return;
-    }
-    
-    // Verify session is still valid
-    const loginTime = localStorage.getItem('loginTime') || localStorage.getItem('adminLoginTime');
-    if (loginTime) {
-        const loginDate = new Date(loginTime);
-        const now = new Date();
-        const diffHours = (now - loginDate) / (1000 * 60 * 60);
-        
-        // Auto logout after 24 hours for users, 8 hours for admin
-        const maxHours = adminLoggedIn ? 8 : 24;
-        if (diffHours > maxHours) {
-            localStorage.removeItem('userLoggedIn');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('loginTime');
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminUsername');
-            localStorage.removeItem('adminLoginTime');
-            localStorage.removeItem('adminSessionSecure');
-            showNotification('Session expired. Please login again.', 'error');
-            setTimeout(() => {
-                window.location.href = '/login';
-            }, 2000);
-            return;
-        }
-    }
-    
-    console.log('Dashboard access granted for user:', localStorage.getItem('userEmail') || localStorage.getItem('adminUsername'));
-});
-
-// Notification function for dashboard
+<!-- Dashboard Content -->
 function showNotification(message, type) {
     type = type || 'info';
     const notification = document.createElement('div');
@@ -91,6 +47,32 @@ function showNotification(message, type) {
         <h1 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text reveal">User Dashboard</h1>
         
         <div class="max-w-6xl mx-auto">
+            <!-- User Profile Section -->
+            <div class="bg-white p-6 rounded-lg shadow-lg mb-8 reveal">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mr-4">
+                            {{ user.fullname[0]|upper }}
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">{{ user.fullname }}</h2>
+                            <p class="text-gray-600">{{ user.email }}</p>
+                            <p class="text-sm text-gray-500">Member since {{ user.created_at.split(' ')[0] }}</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="/settings" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                            <i class="fas fa-cog mr-2"></i>Settings
+                        </a>
+                        <form method="post" action="/logout" class="inline">
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Quick Stats -->
             <div class="grid md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-lg shadow-lg text-center reveal">
