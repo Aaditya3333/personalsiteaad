@@ -592,29 +592,6 @@
             });
         }
 
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            // Clear all auth data
-            localStorage.removeItem('userLoggedIn');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('loginTime');
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminUsername');
-            localStorage.removeItem('adminLoginTime');
-            localStorage.removeItem('adminSessionSecure');
-            
-            // Show notification
-            showNotification('Logged out successfully', 'success');
-            
-            // Update UI
-            checkAuthStatus();
-            
-            // Redirect to home
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1000);
-        });
-
         // Notification system
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
@@ -646,70 +623,6 @@
         // Check auth status on page load
         checkAuthStatus();
 
-        // Only redirect if not on auth pages and not on main pages
-        const currentPath = window.location.pathname;
-        const authPages = ['/login', '/admin-login', '/register', '/admin-register'];
-        const mainPages = ['/', '/about', '/projects', '/blog', '/contact', '/chatbot'];
-        const isAuthPage = authPages.some(page => currentPath.includes(page));
-        const isMainPage = mainPages.some(page => currentPath === page || currentPath === page + '/');
-        
-        if (!isAuthPage && !isMainPage) {
-            // Only redirect if on protected pages and not logged in
-            const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-            const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-            
-            // Check specific page permissions
-            if (currentPath === '/dashboard' && !userLoggedIn && !adminLoggedIn) {
-                window.location.href = '/login';
-            } else if (currentPath === '/admin' && !adminLoggedIn) {
-                window.location.href = '/admin-login';
-            } else if (currentPath === '/settings' && !userLoggedIn && !adminLoggedIn) {
-                window.location.href = '/login';
-            } else if (currentPath === '/analytics' && !adminLoggedIn) {
-                window.location.href = '/admin-login';
-            }
-        }
-
-        // Check session timeout
-        function checkSessionTimeout() {
-            const userLoginTime = localStorage.getItem('loginTime');
-            const adminLoginTime = localStorage.getItem('adminLoginTime');
-            
-            if (userLoginTime) {
-                const loginTime = new Date(userLoginTime);
-                const now = new Date();
-                const diffHours = (now - loginTime) / (1000 * 60 * 60);
-                
-                // Auto logout after 24 hours
-                if (diffHours > 24) {
-                    localStorage.removeItem('userLoggedIn');
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('loginTime');
-                    showNotification('Session expired. Please login again.', 'info');
-                    checkAuthStatus();
-                }
-            }
-            
-            if (adminLoginTime) {
-                const loginTime = new Date(adminLoginTime);
-                const now = new Date();
-                const diffHours = (now - loginTime) / (1000 * 60 * 60);
-                
-                // Auto logout admin after 8 hours
-                if (diffHours > 8) {
-                    localStorage.removeItem('adminLoggedIn');
-                    localStorage.removeItem('adminUsername');
-                    localStorage.removeItem('adminLoginTime');
-                    localStorage.removeItem('adminSessionSecure');
-                    showNotification('Admin session expired. Please login again.', 'info');
-                    checkAuthStatus();
-                }
-            }
-        }
-
-        // Check session every 5 minutes
-        setInterval(checkSessionTimeout, 300000);
-        
         // Check for saved dark mode preference
         if (localStorage.getItem('darkMode') === 'true') {
             body.classList.add('dark');
