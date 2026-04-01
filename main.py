@@ -42,7 +42,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-templates = Jinja2Templates(directory="templates")
+# Configure Jinja2 to avoid caching issues with dict contexts
+from jinja2 import Environment, FileSystemLoader
+jinja_env = Environment(loader=FileSystemLoader("templates"), cache_size=0)
+templates = Jinja2Templates(env=jinja_env)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
