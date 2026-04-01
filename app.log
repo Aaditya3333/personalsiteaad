@@ -6,3 +6,35 @@
 2026-04-01 12:22:25,131 - __main__ - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
 2026-04-01 12:22:25,134 - __main__ - INFO - Database initialized successfully
 2026-04-01 12:22:25,134 - __main__ - INFO - Application startup completed successfully
+2026-04-01 12:38:36,134 - __main__ - INFO - Application starting up...
+2026-04-01 12:38:36,137 - __main__ - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:38:36,211 - __main__ - INFO - Database initialized successfully
+2026-04-01 12:38:36,211 - __main__ - INFO - Application startup completed successfully
+2026-04-01 12:38:36,213 - __main__ - INFO - Application shutting down...
+2026-04-01 12:40:00,573 - __main__ - INFO - Application starting up...
+2026-04-01 12:40:00,573 - __main__ - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:40:00,575 - __main__ - INFO - Database initialized successfully
+2026-04-01 12:40:00,672 - __main__ - INFO - Application startup completed successfully
+2026-04-01 12:40:00,673 - __main__ - INFO - Application shutting down...
+2026-04-01 12:40:28,110 - main - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:40:28,114 - main - INFO - Database initialized successfully
+2026-04-01 12:41:03,769 - main - INFO - Application starting up...
+2026-04-01 12:41:03,770 - main - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:41:03,772 - main - INFO - Database initialized successfully
+2026-04-01 12:41:03,773 - main - INFO - Application startup completed successfully
+2026-04-01 12:41:03,774 - main - INFO - Application shutting down...
+2026-04-01 12:49:52,421 - main - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:49:52,427 - main - INFO - Database initialized successfully
+2026-04-01 12:49:52,660 - httpx - INFO - HTTP Request: GET http://testserver/ "HTTP/1.1 200 OK"
+2026-04-01 12:51:53,630 - __main__ - INFO - Application starting up...
+2026-04-01 12:51:53,630 - __main__ - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:51:53,632 - __main__ - INFO - Database initialized successfully
+2026-04-01 12:51:53,633 - __main__ - INFO - Application startup completed successfully
+2026-04-01 12:51:53,635 - __main__ - INFO - Application shutting down...
+2026-04-01 12:52:58,550 - main - INFO - Application starting up...
+2026-04-01 12:52:58,551 - main - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:52:58,553 - main - INFO - Database initialized successfully
+2026-04-01 12:52:58,553 - main - INFO - Application startup completed successfully
+2026-04-01 12:52:58,555 - main - INFO - Application shutting down...
+2026-04-01 12:53:19,610 - main - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-01 12:53:19,613 - main - INFO - Database initialized successfully
