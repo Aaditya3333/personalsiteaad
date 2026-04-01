@@ -191,7 +191,7 @@ def get_visitor_count() -> int:
     cursor.execute('SELECT value FROM metrics WHERE key = ?', ('visitor_count',))
     row = cursor.fetchone()
     conn.close()
-    return row['value'] if row else 0
+    return row[0] if row else 0
 
 
 def increment_visitor():
