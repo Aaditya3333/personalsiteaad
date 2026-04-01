@@ -225,6 +225,38 @@ def validate_session(session_id: str):
         }
     return None
 
+@app.get('/api/session')
+async def api_get_session(request: Request):
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return {'user': None, 'admin': None}
+
+    session = validate_session(session_id)
+    if not session:
+        return {'user': None, 'admin': None}
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    if session['user_type'] == 'user':
+        cursor.execute('SELECT fullname, email, username FROM users WHERE id = ?', (session['user_id'],))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return {'user': {'fullname': row[0], 'email': row[1], 'username': row[2]}, 'admin': None}
+        return {'user': None, 'admin': None}
+
+    if session['user_type'] == 'admin':
+        cursor.execute('SELECT fullname, username, email FROM admin_users WHERE id = ?', (session['user_id'],))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return {'user': None, 'admin': {'fullname': row[0], 'username': row[1], 'email': row[2]}}
+        return {'user': None, 'admin': None}
+
+    conn.close()
+    return {'user': None, 'admin': None}
+
 def delete_session(session_id: str):
     """Delete session"""
     conn = sqlite3.connect('users.db')

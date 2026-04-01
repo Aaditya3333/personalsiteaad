@@ -520,10 +520,7 @@
         mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
 
         // Authentication System
-        function checkAuthStatus() {
-            const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-            const adminLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-            
+        async function checkAuthStatus() {
             const userLoginBtn = document.getElementById('user-login-btn');
             const userRegisterBtn = document.getElementById('user-register-btn');
             const adminLoginBtn = document.getElementById('admin-login-btn');
@@ -531,42 +528,51 @@
             const logoutBtn = document.getElementById('logout-btn');
             const userNav = document.getElementById('user-nav');
             const adminNav = document.getElementById('admin-nav');
-            
-            if (userLoggedIn || adminLoggedIn) {
-                // Hide login and register buttons
+
+            let user = null;
+            let admin = null;
+
+            try {
+                const response = await fetch('/api/session', { credentials: 'same-origin' });
+                if (response.ok) {
+                    const data = await response.json();
+                    user = data.user;
+                    admin = data.admin;
+                }
+            } catch (err) {
+                console.error('Could not fetch session status:', err);
+            }
+
+            const loggedIn = Boolean(user || admin);
+
+            if (loggedIn) {
                 userLoginBtn.classList.add('hidden');
                 userRegisterBtn.classList.add('hidden');
                 adminLoginBtn.classList.add('hidden');
-                
-                // Show user info
+
                 userInfo.classList.remove('hidden');
                 userInfo.classList.add('flex');
-                
-                // Update user info
-                const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('adminUsername') || 'User';
+
+                const userEmail = (user && user.email) || (admin && admin.username) || (admin && admin.email) || 'User';
                 const userInitial = userEmail.charAt(0).toUpperCase();
-                
                 document.getElementById('user-email').textContent = userEmail;
                 document.getElementById('user-initial').textContent = userInitial;
-                
-                // Show appropriate navigation
-                if (userLoggedIn) {
+
+                if (user) {
                     userNav.classList.remove('hidden');
-                }
-                if (adminLoggedIn) {
+                    adminNav.classList.add('hidden');
+                } else if (admin) {
+                    userNav.classList.add('hidden');
                     adminNav.classList.remove('hidden');
                 }
             } else {
-                // Show login and register buttons
                 userLoginBtn.classList.remove('hidden');
                 userRegisterBtn.classList.remove('hidden');
                 adminLoginBtn.classList.remove('hidden');
-                
-                // Hide user info
+
                 userInfo.classList.add('hidden');
                 userInfo.classList.remove('flex');
-                
-                // Hide navigation
+
                 userNav.classList.add('hidden');
                 adminNav.classList.add('hidden');
             }
@@ -622,6 +628,26 @@
 
         // Check auth status on page load
         checkAuthStatus();
+
+        // Logout button handler
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async function() {
+                try {
+                    await fetch('/logout', {
+                        method: 'POST',
+                        credentials: 'same-origin'
+                    });
+                } catch (err) {
+                    console.error('Logout failed', err);
+                }
+
+                showNotification('Logged out successfully', 'success');
+                await checkAuthStatus();
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 700);
+            });
+        }
 
         // Check for saved dark mode preference
         if (localStorage.getItem('darkMode') === 'true') {
