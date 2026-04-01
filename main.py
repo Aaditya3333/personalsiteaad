@@ -732,7 +732,7 @@ async def admin_register_user(request: Request):
         # Insert new admin
         cursor.execute('''
             INSERT INTO admin_users (username, password, fullname, email, role, security_question, security_answer) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', (username, hash_password(password), fullname, email, role, security_question, security_answer))
         
         conn.commit()
@@ -800,4 +800,4 @@ async def not_found(request: Request, exc):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
