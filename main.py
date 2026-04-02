@@ -364,6 +364,15 @@ async def internal_error(request: Request, exc):
 async def healthz():
     return {"status": "ok"}
 
+# Minimal page without templates to isolate rendering errors
+@app.get("/plain")
+async def plain():
+    try:
+        count = get_visitor_count()
+        return HTMLResponse(f"<html><body><h1>OK</h1><p>Visitors: {count}</p></body></html>")
+    except Exception:
+        logger.exception("Plain page failed")
+        return HTMLResponse("<h1>Error</h1>", status_code=500)
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
