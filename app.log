@@ -193,3 +193,11 @@
 2026-04-02 07:28:17,784 - main - INFO - Projects query returned: 5 rows
 2026-04-02 07:28:17,785 - main - INFO - First project: (1, 'E-Commerce Platform', 'Full-stack e-commerce solution with payment integration and admin dashboard.', 'React,Node.js,MongoDB', '/static/images/2.webp', '#', '#', '2026-04-02 01:38:55')
 2026-04-02 07:28:32,397 - main - INFO - visitor_count type: <class 'int'>, value: 1
+2026-04-02 07:41:05,858 - main - INFO - Projects query returned: 5 rows
+2026-04-02 07:41:05,860 - main - INFO - First project: (1, 'E-Commerce Platform', 'Full-stack e-commerce solution with payment integration and admin dashboard.', 'React,Node.js,MongoDB', '/static/images/2.webp', '#', '#', '2026-04-02 01:38:55')
+2026-04-02 07:41:09,729 - main - INFO - visitor_count type: <class 'int'>, value: 2
+2026-04-02 07:45:19,830 - __main__ - INFO - Application starting up...
+2026-04-02 07:45:19,832 - __main__ - INFO - Initializing database at: C:\Users\aadit\OneDrive\Desktop\New folder\CascadeProjects\windsurf-project\users.db
+2026-04-02 07:45:19,848 - __main__ - INFO - Database initialized successfully
+2026-04-02 07:45:19,849 - __main__ - INFO - Application startup completed successfully
+2026-04-02 07:46:02,806 - main - INFO - Application shutting down...
