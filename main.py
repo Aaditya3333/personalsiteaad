@@ -129,6 +129,22 @@ def init_db():
             )
         ''')
 
+        # Create blog posts table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS blog_posts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                slug TEXT UNIQUE NOT NULL,
+                description TEXT,
+                content TEXT,
+                tags TEXT,
+                image TEXT,
+                read_time TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+
         # Create metrics table for visitor count
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS metrics (
@@ -150,8 +166,32 @@ def init_db():
             ''', [
                 ('E-Commerce Platform', 'Full-stack e-commerce solution with payment integration and admin dashboard.', 'React,Node.js,MongoDB', '/static/images/2.webp', '#', '#'),
                 ('Task Management App', 'Collaborative task management tool with real-time updates and team features.', 'Vue.js,FastAPI,Redis', '/static/images/3.jpg', '#', '#'),
-                ('Weather Dashboard', 'Real-time weather monitoring dashboard with data visualization and forecasts.', 'JavaScript,Chart.js,API', '/static/images/4.webp', '#', '#')
+                ('Weather Dashboard', 'Real-time weather monitoring dashboard with data visualization and forecasts.', 'JavaScript,Chart.js,API', '/static/images/4.webp', '#', '#'),
+                ('Blog Platform', 'Modern blogging platform with markdown support and SEO optimization.', 'Next.js,PostgreSQL,Tailwind', '/static/images/5.jpg', '#', '#'),
+                ('Social Media Analytics', 'Analytics dashboard for social media metrics with data visualization.', 'React,D3.js,Python', '/static/images/7.jpg', '#', '#')
             ])
+            logger.info("Seeded 5 projects")
+        else:
+            logger.info(f"Projects table already has {project_count} rows")
+
+        # Seed initial blog posts if table is empty
+        cursor.execute('SELECT COUNT(*) FROM blog_posts')
+        blog_count = cursor.fetchone()[0]
+        if blog_count == 0:
+            cursor.executemany('''
+                INSERT INTO blog_posts (title, slug, description, content, tags, image, read_time)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', [
+                ('Building Scalable APIs with FastAPI', 'building-scalable-apis', 'Learn how to create high-performance REST APIs using Pythons FastAPI framework.', '<h2>Introduction</h2><p>FastAPI is a modern, fast web framework for building APIs with Python. It is designed to be easy to use while providing high performance.</p><h2>Key Features</h2><ul><li><strong>Fast Performance:</strong> Built on top of Starlette and Pydantic</li><li><strong>Automatic Documentation:</strong> OpenAPI and JSON Schema documentation automatically generated</li><li><strong>Type Hints:</strong> Full support for Python type hints</li></ul>', 'Python,FastAPI,API', '/static/images/2.webp', '5 min read'),
+                ('Modern CSS Techniques for 2024', 'modern-css-techniques', 'Explore the latest CSS features and techniques for creating stunning web designs.', '<h2>The Evolution of CSS</h2><p>CSS has evolved tremendously over past few years. Modern CSS provides powerful features.</p><h2>Container Queries</h2><p>Container queries allow you to apply styles based on size of a container element rather than viewport.</p>', 'CSS,Design,Frontend', '/static/images/3.jpg', '8 min read'),
+                ('Database Optimization Strategies', 'database-optimization', 'Essential techniques for optimizing database performance in web applications.', '<h2>Why Database Optimization Matters</h2><p>Database performance is crucial for application responsiveness and user experience.</p><h2>Indexing Strategies</h2><ul><li>Create indexes on frequently queried columns</li><li>Use composite indexes for multi-column queries</li><li>Avoid over-indexing as it can slow down writes</li></ul>', 'Database,Performance,SQL', '/static/images/4.webp', '6 min read'),
+                ('React Hooks Deep Dive', 'react-hooks-deep-dive', 'Understanding advanced React Hooks patterns and best practices for modern development.', '<h2>What are Hooks</h2><p>React Hooks let you use state and other React features without writing a class.</p><h2>Common Hooks</h2><ul><li>useState - manage component state</li><li>useEffect - perform side effects</li><li>useContext - access context values</li></ul>', 'React,JavaScript,Hooks', '/static/images/5.jpg', '7 min read'),
+                ('UI/UX Design Principles', 'ui-ux-design-principles', 'Fundamental principles for creating user-centered designs that delight and convert.', '<h2>User-Centered Design</h2><p>The foundation of good design is understanding your users and their needs.</p><h2>Key Principles</h2><ul><li>Simplicity - Keep interfaces clean and intuitive</li><li>Consistency - Maintain visual and interaction patterns</li><li>Feedback - Provide clear feedback for user actions</li></ul>', 'Design,UX,UI', '/static/images/6.webp', '4 min read'),
+                ('DevOps Best Practices', 'devops-best-practices', 'Streamlining development workflows with modern DevOps tools and methodologies.', '<h2>What is DevOps</h2><p>DevOps combines software development and IT operations to shorten the systems development life cycle.</p><h2>Best Practices</h2><ul><li>Continuous Integration - Automate testing and building</li><li>Continuous Deployment - Automate releases</li><li>Infrastructure as Code - Version control your infrastructure</li></ul>', 'DevOps,CI/CD,Docker', '/static/images/7.jpg', '10 min read')
+            ])
+            logger.info("Seeded 6 blog posts")
+        else:
+            logger.info(f"Blog posts table already has {blog_count} rows")
 
         conn.commit()
         conn.close()
@@ -348,17 +388,50 @@ async def about(request: Request):
 async def projects(request: Request, tag: str = None):
     visitor_count = get_visitor_count()
     project_rows = fetch_projects(tag)
-    projects = [dict(p) for p in project_rows]
-    return templates.TemplateResponse("projects.html", {"request": request, "projects": projects, "visitor_count": visitor_count, "selected_tag": tag})
+    logger.info(f"Projects query returned: {len(project_rows)} rows")
+    if project_rows:
+        logger.info(f"First project: {project_rows[0]}")
+    return templates.TemplateResponse("projects.html", {"request": request, "projects": project_rows, "visitor_count": visitor_count, "selected_tag": tag})
 
 @app.get("/blog")
 async def blog(request: Request):
     visitor_count = get_visitor_count()
-    # keep existing static blog list in template if no DB yet
-    return templates.TemplateResponse("blog.html", {"request": request, "visitor_count": visitor_count})
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, title, slug, description, image, read_time FROM blog_posts ORDER BY created_at DESC')
+    blog_rows = cursor.fetchall()
+    conn.close()
+    blog_posts = [dict(zip(['id', 'title', 'slug', 'description', 'image', 'read_time'], row)) for row in blog_rows]
+    return templates.TemplateResponse("blog.html", {"request": request, "visitor_count": visitor_count, "blog_posts": blog_posts})
 
 @app.get("/blog/{slug}")
 async def blog_detail(request: Request, slug: str):
+    visitor_count = get_visitor_count()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT title, description, content, image, read_time, tags, created_at FROM blog_posts WHERE slug = ?', (slug,))
+    blog_post = cursor.fetchone()
+    conn.close()
+    
+    if not blog_post:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+    
+    post = {
+        "title": blog_post[0],
+        "description": blog_post[1],
+        "content": blog_post[2],
+        "image": blog_post[3],
+        "read_time": blog_post[4],
+        "tags": blog_post[5].split(',') if blog_post[5] else [],
+        "date": blog_post[6]
+    }
+    
+    return templates.TemplateResponse("blog-detail.html", {"request": request, "visitor_count": visitor_count, **post})
+
+
+# LEGACY CODE - KEPT FOR REFERENCE
+@app.get("/blog-legacy/{slug}")
+async def blog_detail_legacy(request: Request, slug: str):
     visitor_count = get_visitor_count()
     # Sample blog posts data
     blog_posts = {
@@ -598,7 +671,7 @@ async def settings(request: Request):
         cursor.execute('SELECT fullname, email, role FROM admin_users WHERE id = ?', (session['user_id'],))
         user = cursor.fetchone()
     else:
-        cursor.execute('SELECT fullname, email FROM users WHERE id = ?', (session['user_id'],))
+        cursor.execute('SELECT fullname, email, role FROM users WHERE id = ?', (session['user_id'],))
         user = cursor.fetchone()
     
     conn.close()
@@ -873,9 +946,11 @@ async def contact_submit(request: Request, name: str = Form(...), email: str = F
         })
 
 # 404 Error Handler
-@app.exception_handler(404)
-async def not_found(request: Request, exc):
-    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    raise exc
 
 if __name__ == "__main__":
     import uvicorn
