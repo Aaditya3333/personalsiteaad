@@ -181,7 +181,8 @@ def get_db_connection():
         import os
         db_path = os.path.join(os.getcwd(), 'users.db')
         conn = sqlite3.connect(db_path)
-        # Don't use Row factory to avoid dict access issues
+        # Enable named column access for safe dict conversion
+        conn.row_factory = sqlite3.Row
         return conn
     except Exception as e:
         logger.error(f"Database connection error: {str(e)}")
@@ -219,7 +220,8 @@ def fetch_projects(tag: str = None):
         cursor.execute('SELECT * FROM projects ORDER BY created_at DESC')
     rows = cursor.fetchall()
     conn.close()
-    return rows
+    # Convert sqlite3.Row objects to plain dicts
+    return [dict(row) for row in rows]
 
 def add_contact(data: ContactCreate):
     conn = get_db_connection()
@@ -290,7 +292,7 @@ async def home(request: Request):
         increment_visitor()
         visitor_count = get_visitor_count()
         logger.info(f"visitor_count: {visitor_count}")
-        return templates.TemplateResponse("index.html", {"request": request, "visitor_count": visitor_count})
+        return templates.TemplateResponse("index.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.error(f"Home page error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -299,7 +301,7 @@ async def home(request: Request):
 async def about(request: Request):
     try:
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("about.html", {"request": request, "visitor_count": visitor_count})
+        return templates.TemplateResponse("about.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.error(f"About page error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -308,9 +310,11 @@ async def about(request: Request):
 async def projects(request: Request, tag: str = None):
     try:
         visitor_count = get_visitor_count()
-        project_rows = fetch_projects(tag)
-        projects = [dict(p) for p in project_rows]
-        return templates.TemplateResponse("projects.html", {"request": request, "projects": projects, "visitor_count": visitor_count, "selected_tag": tag})
+        projects = fetch_projects(tag)
+        return templates.TemplateResponse(
+            "projects.html",
+            context={"request": request, "projects": projects, "visitor_count": visitor_count, "selected_tag": tag}
+        )
     except Exception as e:
         logger.error(f"Projects page error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -319,7 +323,7 @@ async def projects(request: Request, tag: str = None):
 async def blog(request: Request):
     try:
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("blog.html", {"request": request, "visitor_count": visitor_count})
+        return templates.TemplateResponse("blog.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.error(f"Blog page error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -328,7 +332,7 @@ async def blog(request: Request):
 async def contact(request: Request):
     try:
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("contact.html", {"request": request, "visitor_count": visitor_count})
+        return templates.TemplateResponse("contact.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.error(f"Contact page error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -337,7 +341,7 @@ async def contact(request: Request):
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
     try:
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+        return templates.TemplateResponse("404.html", context={"request": request}, status_code=404)
     except Exception as e:
         logger.error(f"404 template error: {str(e)}")
         return HTMLResponse("<h1>404 - Page Not Found</h1>", status_code=404)
