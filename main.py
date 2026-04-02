@@ -12,6 +12,7 @@ import uvicorn
 import logging
 import os
 import sys
+import traceback
 
 # Set up logging
 logging.basicConfig(
@@ -294,7 +295,7 @@ async def home(request: Request):
         logger.info(f"visitor_count: {visitor_count}")
         return templates.TemplateResponse("index.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
-        logger.error(f"Home page error: {str(e)}")
+        logger.exception("Home page error")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/about")
@@ -303,7 +304,7 @@ async def about(request: Request):
         visitor_count = get_visitor_count()
         return templates.TemplateResponse("about.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
-        logger.error(f"About page error: {str(e)}")
+        logger.exception("About page error")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/projects")
@@ -316,7 +317,7 @@ async def projects(request: Request, tag: str = None):
             context={"request": request, "projects": projects, "visitor_count": visitor_count, "selected_tag": tag}
         )
     except Exception as e:
-        logger.error(f"Projects page error: {str(e)}")
+        logger.exception("Projects page error")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/blog")
@@ -325,7 +326,7 @@ async def blog(request: Request):
         visitor_count = get_visitor_count()
         return templates.TemplateResponse("blog.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
-        logger.error(f"Blog page error: {str(e)}")
+        logger.exception("Blog page error")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/contact")
@@ -334,7 +335,7 @@ async def contact(request: Request):
         visitor_count = get_visitor_count()
         return templates.TemplateResponse("contact.html", context={"request": request, "visitor_count": visitor_count})
     except Exception as e:
-        logger.error(f"Contact page error: {str(e)}")
+        logger.exception("Contact page error")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 # 404 Error Handler
@@ -343,8 +344,25 @@ async def not_found(request: Request, exc):
     try:
         return templates.TemplateResponse("404.html", context={"request": request}, status_code=404)
     except Exception as e:
-        logger.error(f"404 template error: {str(e)}")
+        logger.exception("404 template error")
         return HTMLResponse("<h1>404 - Page Not Found</h1>", status_code=404)
+
+# Global 500 error handler to render a friendly page instead of JSON
+@app.exception_handler(500)
+async def internal_error(request: Request, exc):
+    try:
+        # Log full traceback
+        logger.exception("Unhandled server error")
+        # Try to render a simple fallback response
+        return HTMLResponse("<h1>500 - Internal Server Error</h1>", status_code=500)
+    except Exception:
+        # Last resort
+        return HTMLResponse("<h1>500 - Internal Server Error</h1>", status_code=500)
+
+# Simple health endpoint for Render
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
