@@ -347,6 +347,34 @@ async def contact(request: Request):
         logger.exception("Contact page error")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+# Auth pages (GET)
+@app.get("/login")
+async def login_page(request: Request):
+    try:
+        visitor_count = get_visitor_count()
+        return render_template("login.html", {"request": request, "visitor_count": visitor_count})
+    except Exception:
+        logger.exception("Login page error")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/register")
+async def register_page(request: Request):
+    try:
+        visitor_count = get_visitor_count()
+        return render_template("register.html", {"request": request, "visitor_count": visitor_count})
+    except Exception:
+        logger.exception("Register page error")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.get("/admin-login")
+async def admin_login_page(request: Request):
+    try:
+        visitor_count = get_visitor_count()
+        return render_template("admin-login.html", {"request": request, "visitor_count": visitor_count})
+    except Exception:
+        logger.exception("Admin login page error")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 # 404 Error Handler
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
