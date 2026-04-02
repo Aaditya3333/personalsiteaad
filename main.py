@@ -48,6 +48,15 @@ templates = Jinja2Templates(directory="templates")
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Safe render helper to avoid TemplateResponse binding issues
+def render_template(name: str, context: dict, status_code: int = 200) -> HTMLResponse:
+    try:
+        template = templates.env.get_template(name)
+        html = template.render(context)
+        return HTMLResponse(html, status_code=status_code)
+    except Exception as e:
+        logger.exception(f"Template render failed for {name}")
+        raise
 # Database setup
 def init_db():
     try:
@@ -293,7 +302,7 @@ async def home(request: Request):
         increment_visitor()
         visitor_count = get_visitor_count()
         logger.info(f"visitor_count: {visitor_count}")
-        return templates.TemplateResponse("index.html", context={"request": request, "visitor_count": visitor_count})
+        return render_template("index.html", {"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.exception("Home page error")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -302,7 +311,7 @@ async def home(request: Request):
 async def about(request: Request):
     try:
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("about.html", context={"request": request, "visitor_count": visitor_count})
+        return render_template("about.html", {"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.exception("About page error")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -312,9 +321,9 @@ async def projects(request: Request, tag: str = None):
     try:
         visitor_count = get_visitor_count()
         projects = fetch_projects(tag)
-        return templates.TemplateResponse(
+        return render_template(
             "projects.html",
-            context={"request": request, "projects": projects, "visitor_count": visitor_count, "selected_tag": tag}
+            {"request": request, "projects": projects, "visitor_count": visitor_count, "selected_tag": tag}
         )
     except Exception as e:
         logger.exception("Projects page error")
@@ -324,7 +333,7 @@ async def projects(request: Request, tag: str = None):
 async def blog(request: Request):
     try:
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("blog.html", context={"request": request, "visitor_count": visitor_count})
+        return render_template("blog.html", {"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.exception("Blog page error")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -333,7 +342,7 @@ async def blog(request: Request):
 async def contact(request: Request):
     try:
         visitor_count = get_visitor_count()
-        return templates.TemplateResponse("contact.html", context={"request": request, "visitor_count": visitor_count})
+        return render_template("contact.html", {"request": request, "visitor_count": visitor_count})
     except Exception as e:
         logger.exception("Contact page error")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -342,7 +351,7 @@ async def contact(request: Request):
 @app.exception_handler(404)
 async def not_found(request: Request, exc):
     try:
-        return templates.TemplateResponse("404.html", context={"request": request}, status_code=404)
+        return render_template("404.html", {"request": request}, status_code=404)
     except Exception as e:
         logger.exception("404 template error")
         return HTMLResponse("<h1>404 - Page Not Found</h1>", status_code=404)
